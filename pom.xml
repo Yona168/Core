@@ -6,7 +6,7 @@
 
     <groupId>yona168plugins</groupId>
     <artifactId>core</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>.01-BETA</version>
 
     <build>
         <plugins>
