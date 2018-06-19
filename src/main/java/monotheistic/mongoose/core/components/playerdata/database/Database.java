@@ -7,6 +7,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
 
 import java.util.IdentityHashMap;
 import java.util.Map;
@@ -22,6 +23,7 @@ public abstract class Database {
     private short backup;
     private Map<Player, PlayerData> cache;
     private BukkitRunnable backupRunnable;
+    private boolean first = false;
 
     public Database(JavaPlugin main, Function<Player, PlayerData> function) {
         this.playerPlayerDataFunction = function;
@@ -44,7 +46,7 @@ public abstract class Database {
                 backup();
             }
         };
-        scheduleBackups(main, true);
+        scheduleBackups(main);
 
     }
 
@@ -75,7 +77,7 @@ public abstract class Database {
 
     public abstract boolean isRegistered(UUID uuid);
 
-    private void scheduleBackups(JavaPlugin main, boolean first) {
+    private void scheduleBackups(JavaPlugin main) {
         if (backupIsEnabled()) {
             if (!first && backupRunnable.isCancelled())
                 backupRunnable.cancel();
@@ -83,9 +85,9 @@ public abstract class Database {
         }
     }
 
-    public void setBackup(short backupMins, JavaPlugin main, boolean first) {
+    public void setBackup(short backupMins, JavaPlugin main) {
         this.backup = backupMins;
-        scheduleBackups(main, first);
+        scheduleBackups(main);
     }
 
     void disableBackup() {
