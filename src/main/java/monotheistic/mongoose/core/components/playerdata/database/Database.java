@@ -13,23 +13,25 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 import static com.gitlab.avelyn.core.base.Events.listen;
 
 public abstract class Database {
 
-    private final Function<Player, PlayerData> playerPlayerDataFunction;
+    private final Supplier<PlayerData> playerPlayerDataFunction;
     private short backup;
     private Map<Player, PlayerData> cache;
     private BukkitRunnable backupRunnable;
     private boolean first = true;
-    public Database(JavaPlugin main, Function<Player, PlayerData> function) {
+
+    public Database(JavaPlugin main, Supplier<PlayerData> function) {
         this.playerPlayerDataFunction = function;
         cache = new IdentityHashMap<>();
         listen((PlayerJoinEvent event) -> {
             final Player player = event.getPlayer();
             final PlayerData data = fromStorage(player).orElseGet(() ->
-                    write(createData(player)));
+                    write(createData()));
             cache.put(player, data);
         }).enable();
         listen((PlayerQuitEvent event) ->
@@ -63,8 +65,8 @@ public abstract class Database {
 
     public abstract Optional<PlayerData> fromStorage(Player player);
 
-    private PlayerData createData(Player player) {
-        return playerPlayerDataFunction.apply(player);
+    private PlayerData createData() {
+        return playerPlayerDataFunction.get();
     }
 
     public Optional<PlayerData> fromStorage(UUID uuid) {
@@ -79,7 +81,7 @@ public abstract class Database {
         if (backupIsEnabled()) {
             if (!first && backupRunnable.isCancelled())
                 backupRunnable.cancel();
-            else first=false;
+            else first = false;
             backupRunnable.runTaskTimer(main, 0, backup * 20 * 60);
         }
     }
@@ -97,4 +99,7 @@ public abstract class Database {
         return backup != 0;
     }
 
+    public Supplier<PlayerData> playerDataSupplier() {
+        return this.playerPlayerDataFunction;
+    }
 }

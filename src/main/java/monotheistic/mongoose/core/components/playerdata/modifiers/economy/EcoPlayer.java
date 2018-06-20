@@ -1,4 +1,6 @@
-package monotheistic.mongoose.core.components.playerdata.modifiers;
+package monotheistic.mongoose.core.components.playerdata.modifiers.economy;
+
+import monotheistic.mongoose.core.components.playerdata.modifiers.PlayerDataModifier;
 
 public interface EcoPlayer extends PlayerDataModifier {
     double getBalance();

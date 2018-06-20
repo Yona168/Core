@@ -41,7 +41,6 @@ public interface XPPlayer extends PlayerDataModifier {
         }
         setCurrentXp(currentXp() - margin);
         amt -= margin;
-        int counter = 0;
         while (amt > previousThreshold() && previousThreshold() != threshold()) {
             amt -= previousThreshold();
             setCurrentXp(previousThreshold());
