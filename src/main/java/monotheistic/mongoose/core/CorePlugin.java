@@ -15,8 +15,7 @@ public abstract class CorePlugin extends JavaPlugin {
         PluginStrings.setup(this, ChatColor.RED, ChatColor.AQUA, "Undefined", "None");
     }
 
-    public void setup(Database database) {
-        setup();
+    public void setupDb(Database database) {
         Configuration dbOptions = new Configuration(this, "dboptions.yml");
         if (dbOptions.configuration().getBoolean("database.do backup"))
             database.setBackup((short) dbOptions.configuration().getInt("database.every"), this);

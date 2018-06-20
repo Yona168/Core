@@ -23,8 +23,7 @@ public abstract class Database {
     private short backup;
     private Map<Player, PlayerData> cache;
     private BukkitRunnable backupRunnable;
-    private boolean first = false;
-
+    boolean first = false;
     public Database(JavaPlugin main, Function<Player, PlayerData> function) {
         this.playerPlayerDataFunction = function;
         cache = new IdentityHashMap<>();
