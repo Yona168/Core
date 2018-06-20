@@ -12,7 +12,6 @@ import java.util.IdentityHashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.function.Function;
 import java.util.function.Supplier;
 
 import static com.gitlab.avelyn.core.base.Events.listen;
