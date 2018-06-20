@@ -23,7 +23,7 @@ public abstract class Database {
     private short backup;
     private Map<Player, PlayerData> cache;
     private BukkitRunnable backupRunnable;
-    boolean first = false;
+    private boolean first = true;
     public Database(JavaPlugin main, Function<Player, PlayerData> function) {
         this.playerPlayerDataFunction = function;
         cache = new IdentityHashMap<>();
@@ -80,6 +80,7 @@ public abstract class Database {
         if (backupIsEnabled()) {
             if (!first && backupRunnable.isCancelled())
                 backupRunnable.cancel();
+            else first=false;
             backupRunnable.runTaskTimer(main, 0, backup * 20 * 60);
         }
     }
