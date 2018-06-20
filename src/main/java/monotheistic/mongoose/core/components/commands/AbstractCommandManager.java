@@ -8,7 +8,7 @@ import java.util.*;
 import java.util.function.Function;
 
 public abstract class AbstractCommandManager implements CommandExecutor {
-    private Set<SubCommand> commands;
+    private final Set<SubCommand> commands;
     private JavaPlugin main;
 
     public AbstractCommandManager(final JavaPlugin javaPlugin, final Collection<SubCommand> commands) {
@@ -17,6 +17,7 @@ public abstract class AbstractCommandManager implements CommandExecutor {
     }
 
     public AbstractCommandManager(final JavaPlugin javaPlugin) {
+        this.main=javaPlugin;
         this.commands = Collections.newSetFromMap(new IdentityHashMap<>());
     }
 

@@ -7,7 +7,6 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.scheduler.BukkitTask;
 
 import java.util.IdentityHashMap;
 import java.util.Map;
@@ -19,7 +18,7 @@ import static com.gitlab.avelyn.core.base.Events.listen;
 
 public abstract class Database {
 
-    private Function<Player, PlayerData> playerPlayerDataFunction;
+    private final Function<Player, PlayerData> playerPlayerDataFunction;
     private short backup;
     private Map<Player, PlayerData> cache;
     private BukkitRunnable backupRunnable;

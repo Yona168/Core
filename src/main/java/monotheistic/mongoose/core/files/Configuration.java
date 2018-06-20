@@ -10,17 +10,21 @@ import java.nio.file.Paths;
 import java.util.Objects;
 
 public class Configuration {
-    private FileConfiguration config;
+    private final FileConfiguration config;
     private Path file;
 
     public Configuration(JavaPlugin plugin, String file) {
         plugin.saveResource(file, false);
-        this.file=Paths.get(plugin.getDataFolder()+ File.separator+file);
-        this.config=FileUtils.loadConfig(this.file.toFile());
+        this.file = Paths.get(plugin.getDataFolder() + File.separator + file);
+        this.config = FileUtils.loadConfig(this.file.toFile());
     }
 
     public void save() {
         FileUtils.save(file.toFile(), config);
+    }
+
+    public void reload() {
+        FileUtils.reload(file.toFile(), config);
     }
 
     public FileConfiguration configuration() {

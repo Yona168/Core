@@ -18,7 +18,7 @@ import java.util.UUID;
 import java.util.function.Function;
 
 public class FileDatabase extends Database {
-    private Kryo kryo;
+    private final Kryo kryo;
     private final Path playerFolder;
 
     public FileDatabase(JavaPlugin main, Function<Player, PlayerData> function) {

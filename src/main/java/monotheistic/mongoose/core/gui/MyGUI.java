@@ -81,7 +81,7 @@ public class MyGUI {
 
 
     private class InventoryHolderImpl implements InventoryHolder {
-        private Map<ItemStack, Consumer<InventoryClickEvent>> listeners;
+        private final Map<ItemStack, Consumer<InventoryClickEvent>> listeners;
 
         InventoryHolderImpl(Map<ItemStack, Consumer<InventoryClickEvent>> listeners) {
             this.listeners = listeners;
@@ -116,7 +116,7 @@ public class MyGUI {
         });
 
 
-        private BiConsumer<ItemStack, Inventory> putAction;
+        private final BiConsumer<ItemStack, Inventory> putAction;
 
         PatternType(BiConsumer<ItemStack, Inventory> action) {
             this.putAction = action;

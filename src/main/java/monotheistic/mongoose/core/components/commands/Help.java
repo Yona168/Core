@@ -6,7 +6,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
 public class Help extends SubCommand {
-    AbstractCommandManager commandManager;
+    final AbstractCommandManager commandManager;
 
     public Help(AbstractCommandManager commandManager) {
         super("help", "Displays commands and their descriptions", "help [page]", null);

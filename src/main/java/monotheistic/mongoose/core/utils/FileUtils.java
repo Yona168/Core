@@ -32,6 +32,11 @@ public interface FileUtils {
         return config;
     }
 
+    static FileConfiguration reload(File file, FileConfiguration c) {
+        c = YamlConfiguration.loadConfiguration(file);
+        return save(file, c);
+    }
+
     static void createDirectory(Path directory) {
         try {
             Files.createDirectory(directory);

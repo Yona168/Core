@@ -7,9 +7,9 @@ import org.bukkit.ChatColor;
 
 public class EconomyTransaction implements Transaction {
 
-    private EcoPlayer giver;
-    private EcoPlayer taker;
-    private double amount;
+    private final EcoPlayer giver;
+    private final EcoPlayer taker;
+    private final double amount;
 
     public EconomyTransaction(EcoPlayer giver, EcoPlayer taker, double amount) {
         this.giver = giver;

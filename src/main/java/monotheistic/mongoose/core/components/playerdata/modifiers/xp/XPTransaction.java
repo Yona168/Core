@@ -5,9 +5,9 @@ import monotheistic.mongoose.core.strings.PluginStrings;
 import org.bukkit.ChatColor;
 
 public class XPTransaction implements Transaction {
-    private XPPlayer giver;
-    private XPPlayer taker;
-    private int amt;
+    private final XPPlayer giver;
+    private final XPPlayer taker;
+    private final int amt;
 
     public XPTransaction(XPPlayer giver, XPPlayer taker, int amt) {
         this.giver = giver;
