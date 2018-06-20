@@ -10,7 +10,6 @@ import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 
-import javax.annotation.Nonnull;
 import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
@@ -35,7 +34,7 @@ public class MyGUI {
         }).enable();
     }
 
-    public MyGUI(String name, int size, @Nonnull Map<ItemStack, Consumer<InventoryClickEvent>> listeners) {
+    public MyGUI(String name, int size, Map<ItemStack, Consumer<InventoryClickEvent>> listeners) {
         inventory = Bukkit.createInventory(new InventoryHolderImpl(listeners), size, name);
         inventory.setContents(listeners.keySet().toArray(new ItemStack[size]));
 

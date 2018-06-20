@@ -3,7 +3,6 @@ package monotheistic.mongoose.core.strings;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import javax.annotation.Nullable;
 
 public abstract class PluginStrings {
 
@@ -17,7 +16,7 @@ public abstract class PluginStrings {
     private static String CMD_LABEL_WITH_SLASH;
 
 
-    public static void setup(JavaPlugin plugin, ChatColor main, ChatColor secondary, @Nullable String nameForTag, String commandLabel) {
+    public static void setup(JavaPlugin plugin, ChatColor main, ChatColor secondary, String nameForTag, String commandLabel) {
         MAIN_COLOR = main;
         SECONDARY_COLOR = secondary;
         TAG = secondary + "[" + main + (nameForTag == null ? plugin.getDescription().getName() : nameForTag) + secondary + "]" + ChatColor.RESET;
