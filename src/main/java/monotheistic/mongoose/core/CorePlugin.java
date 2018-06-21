@@ -9,6 +9,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public abstract class CorePlugin extends JavaPlugin {
 
+    public CorePlugin() {
+        setup();
+    }
     public void setup() {
         Server.initialize(this);
         PluginStrings.setup(this, ChatColor.RED, ChatColor.AQUA, "Undefined", "None");
