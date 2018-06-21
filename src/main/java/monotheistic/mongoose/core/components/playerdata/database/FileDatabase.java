@@ -15,13 +15,13 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.function.Function;
+import java.util.function.Supplier;
 
 public class FileDatabase extends Database {
     private final Kryo kryo;
     private final Path playerFolder;
 
-    public FileDatabase(JavaPlugin main, Function<Player, PlayerData> function) {
+    public FileDatabase(JavaPlugin main, Supplier<PlayerData> function) {
         super(main, function);
         kryo = new Kryo();
         kryo.setInstantiatorStrategy(new Kryo.DefaultInstantiatorStrategy(new StdInstantiatorStrategy()));
@@ -36,13 +36,13 @@ public class FileDatabase extends Database {
     @Override
     public Optional<PlayerData> fromStorage(Player player) {
         return FileUtils.list(playerFolder).filter(file -> file.getFileName().toString().equals(player.getUniqueId().toString()))
-                .findAny().map(file -> ((PlayerData) thaw(kryo, file)).setTransientFields(player));
+                .findAny().map(file -> (thaw(kryo, file)));
     }
 
     @Override
-    public PlayerData write(PlayerData data) {
+    public PlayerData write(Player player, PlayerData data) {
         try {
-            freeze(kryo, Paths.get(playerFolder + File.separator + data.getPlayer().getUniqueId()), data);
+            freeze(kryo, Paths.get(playerFolder + File.separator + player.getUniqueId()), data);
         } catch (IOException e) {
             e.printStackTrace();
         }

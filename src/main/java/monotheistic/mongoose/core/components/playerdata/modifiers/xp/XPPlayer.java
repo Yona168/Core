@@ -12,12 +12,12 @@ public interface XPPlayer extends PlayerDataModifier {
 
     void setCurrentLevel(int amt);
 
-    int levelUpAmount();
+    int levelUpAmountIncrease();
 
     int threshold();
 
     default int previousThreshold() {
-        return threshold() == levelUpAmount() ? threshold() : threshold() - levelUpAmount();
+        return threshold() == levelUpAmountIncrease() ? threshold() : threshold() - levelUpAmountIncrease();
     }
 
     void setNextThreshold();

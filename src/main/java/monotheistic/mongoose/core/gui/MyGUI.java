@@ -40,6 +40,10 @@ public class MyGUI {
 
     }
 
+    public MyGUI(String name, int size) {
+        this(name, size, null);
+    }
+
     public MyGUI set(int slot, ItemStack item, Consumer<InventoryClickEvent> eventConsumer) {
         inventory.setItem(slot, item);
         getListeners().put(item, eventConsumer);

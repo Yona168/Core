@@ -30,12 +30,12 @@ public abstract class Database {
         listen((PlayerJoinEvent event) -> {
             final Player player = event.getPlayer();
             final PlayerData data = fromStorage(player).orElseGet(() ->
-                    write(createData()));
+                    write(player, createData()));
             cache.put(player, data);
         }).enable();
         listen((PlayerQuitEvent event) ->
                 fromCache(event.getPlayer()).ifPresent(playerData -> {
-                    write(playerData);
+                    write(event.getPlayer(), playerData);
                     cache.remove(event.getPlayer());
                 })).enable();
 
@@ -54,7 +54,7 @@ public abstract class Database {
     }
 
     private void backup() {
-        cache.values().forEach(Database.this::write);
+        cache.forEach(Database.this::write);
     }
 
     public Optional<PlayerData> fromCache(Player player) {
@@ -72,7 +72,7 @@ public abstract class Database {
         return fromStorage(Bukkit.getPlayer(uuid));
     }
 
-    public abstract PlayerData write(PlayerData data);
+    public abstract PlayerData write(Player player, PlayerData data);
 
     public abstract boolean isRegistered(UUID uuid);
 
