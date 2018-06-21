@@ -26,7 +26,6 @@ Instead of extending JavaPlugin, extend CorePlugin. Like so:
 public class Main extends CorePlugin{
 @Override
 public void onEnable(){
-super.setup()// <--CALL THIS METHOD
 //If you wish to use commands, or any feature that outputs strings, see the Commands section for what to add here.
 }
 
@@ -113,7 +112,6 @@ public class Main extends CorePlugin{
 private Database database;
 @Override
 public void onEnable(){
-super.setup();
 this.database=super.setupDb(new FileDatabase(this, ()->new XPPlayerThing());
 }
 
@@ -226,7 +224,6 @@ I have made it extremely simple to register commands in the form of subcommands.
 public class Main extends CorePlugin{
 private Database database;
 public void onEnable(){
-super.setup();
 this.database=super.setupDb(new FileDatabase(this, ()->new XPPlayerThing());
 PluginStrings.setup(this, ChatColor.RED, ChatColor.BROWN, "AFurniture", "af");
 }
