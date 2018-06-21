@@ -419,6 +419,7 @@ MyGUI withPattern(MyGUI.PatternType)|Fills the slots of the inventory according 
 I made a bunch of random utilities to make my life easier. Feel free to use them
 
 **FileUtils**
+
 Method | Description
 ------------ | -------------
 static Stream<Path> list(Path path)|Tries and catches Files.list(Path path)
@@ -431,6 +432,7 @@ static void createDirectory(Path directory)|Tries and catches Files.createDirect
 Just runs methods from Bukkit.getScheduler()
 
 **MiscUtils**
+
 Method | Description
 ------------ | -------------
 static Optional<Integer> parseInt(String string)| tries/catches Integer#parseInt on the String and returns an Optional.empty() if fails
