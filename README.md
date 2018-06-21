@@ -243,7 +243,6 @@ public class Main extends CorePlugin{
 private Database database;
 private AbstractCommandManager cmdManager;
 public void onEnable(){
-super.setup();
 this.database=super.setupDb(new FileDatabase(this, ()->new XPPlayerThing());
 PluginStrings.setup(this, ChatColor.RED, ChatColor.BROWN, "AFurniture", "af");
 this.cmdManager=new CommandManager(this);
