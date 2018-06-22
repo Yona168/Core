@@ -1,13 +1,13 @@
 package monotheistic.mongoose.core;
 
 import com.gitlab.avelyn.core.base.Server;
+import com.gitlab.avelyn.core.components.ComponentPlugin;
 import monotheistic.mongoose.core.components.playerdata.database.Database;
 import monotheistic.mongoose.core.files.Configuration;
 import monotheistic.mongoose.core.strings.PluginStrings;
 import org.bukkit.ChatColor;
-import org.bukkit.plugin.java.JavaPlugin;
 
-public abstract class CorePlugin extends JavaPlugin {
+public abstract class CorePlugin extends ComponentPlugin {
 
     public CorePlugin() {
         setup();
