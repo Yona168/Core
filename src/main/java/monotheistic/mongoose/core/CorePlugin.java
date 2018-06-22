@@ -1,6 +1,5 @@
 package monotheistic.mongoose.core;
 
-import com.gitlab.avelyn.core.base.Server;
 import com.gitlab.avelyn.core.components.ComponentPlugin;
 import monotheistic.mongoose.core.components.playerdata.database.Database;
 import monotheistic.mongoose.core.files.Configuration;
@@ -13,7 +12,6 @@ public abstract class CorePlugin extends ComponentPlugin {
         setup();
     }
     public void setup() {
-        Server.initialize(this);
         PluginStrings.setup(this, ChatColor.RED, ChatColor.AQUA, "Undefined", "None");
     }
 
