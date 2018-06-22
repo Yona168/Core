@@ -115,6 +115,10 @@ public void onEnable(){
 this.database=super.setupDb(new FileDatabase(this, ()->new XPPlayerThing());
 }
 
+@Override
+public void onDisable(){
+database.onDisable(this);//backs up data. Not necessary, but reccomended.
+}
 }
 ```
 The setupDb method takes two parameters: The instance of the main class, and a supplier which gives the database the ability to create new XPPlayerThings if needed. After doing this for the first time, a config file will generate in the plugin folder allowing for flexibility with backups.
