@@ -26,7 +26,6 @@ Instead of extending JavaPlugin, extend CorePlugin. Like so:
 public class Main extends CorePlugin{
 @Override
 public void onEnable(){
-super.setup()// <--CALL THIS METHOD
 //If you wish to use commands, or any feature that outputs strings, see the Commands section for what to add here.
 }
 
@@ -113,10 +112,13 @@ public class Main extends CorePlugin{
 private Database database;
 @Override
 public void onEnable(){
-super.setup();
 this.database=super.setupDb(new FileDatabase(this, ()->new XPPlayerThing());
 }
 
+@Override
+public void onDisable(){
+database.onDisable(this);//backs up data. Not necessary, but reccomended.
+}
 }
 ```
 The setupDb method takes two parameters: The instance of the main class, and a supplier which gives the database the ability to create new XPPlayerThings if needed. After doing this for the first time, a config file will generate in the plugin folder allowing for flexibility with backups.
@@ -226,7 +228,6 @@ I have made it extremely simple to register commands in the form of subcommands.
 public class Main extends CorePlugin{
 private Database database;
 public void onEnable(){
-super.setup();
 this.database=super.setupDb(new FileDatabase(this, ()->new XPPlayerThing());
 PluginStrings.setup(this, ChatColor.RED, ChatColor.BROWN, "AFurniture", "af");
 }
@@ -246,7 +247,6 @@ public class Main extends CorePlugin{
 private Database database;
 private AbstractCommandManager cmdManager;
 public void onEnable(){
-super.setup();
 this.database=super.setupDb(new FileDatabase(this, ()->new XPPlayerThing());
 PluginStrings.setup(this, ChatColor.RED, ChatColor.BROWN, "AFurniture", "af");
 this.cmdManager=new CommandManager(this);
@@ -422,6 +422,7 @@ MyGUI withPattern(MyGUI.PatternType)|Fills the slots of the inventory according 
 I made a bunch of random utilities to make my life easier. Feel free to use them
 
 **FileUtils**
+
 Method | Description
 ------------ | -------------
 static Stream<Path> list(Path path)|Tries and catches Files.list(Path path)
@@ -434,6 +435,7 @@ static void createDirectory(Path directory)|Tries and catches Files.createDirect
 Just runs methods from Bukkit.getScheduler()
 
 **MiscUtils**
+
 Method | Description
 ------------ | -------------
 static Optional<Integer> parseInt(String string)| tries/catches Integer#parseInt on the String and returns an Optional.empty() if fails
