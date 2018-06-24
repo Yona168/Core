@@ -35,14 +35,14 @@ public class FileDatabase extends Database {
 
     @Override
     public Optional<PlayerData> fromStorage(Player player) {
-        return FileUtils.list(playerFolder).filter(file -> file.getFileName().toString().equals(player.getUniqueId().toString()))
+        return FileUtils.list(playerFolder).filter(file -> file.getFileName().toString().equals(player.getUniqueId().toString() + ".dat"))
                 .findAny().map(file -> (thaw(kryo, file)));
     }
 
     @Override
     public PlayerData write(Player player, PlayerData data) {
         try {
-            freeze(kryo, Paths.get(playerFolder + File.separator + player.getUniqueId()), data);
+            freeze(kryo, Paths.get(playerFolder + File.separator + player.getUniqueId().toString() + ".dat"), data);
         } catch (IOException e) {
             e.printStackTrace();
         }
