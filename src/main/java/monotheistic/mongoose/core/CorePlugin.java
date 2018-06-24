@@ -10,7 +10,9 @@ public abstract class CorePlugin extends ComponentPlugin {
 
     public CorePlugin() {
         setup();
+        onDisable(PluginStrings::nullifyEverything);
     }
+
     public void setup() {
         PluginStrings.setup(this, ChatColor.RED, ChatColor.AQUA, "Undefined", "None");
     }

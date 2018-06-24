@@ -57,5 +57,15 @@ public abstract class PluginStrings {
         return MUST_BE_PLAYER;
     }
 
+    public static void nullifyEverything() {
+        MAIN_COLOR = null;
+        SECONDARY_COLOR = null;
+        TAG = null;
+        INVALID_SYNTAX = null;
+        NO_PERMS = null;
+        CMD_LABEL_WITH_SLASH = null;
+        CMD_LABEL = null;
+        MUST_BE_PLAYER = null;
+    }
 
 }
