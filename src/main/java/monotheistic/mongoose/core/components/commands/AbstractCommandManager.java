@@ -1,13 +1,14 @@
 package monotheistic.mongoose.core.components.commands;
 
 
+import com.gitlab.avelyn.architecture.base.Component;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.*;
 import java.util.function.Function;
 
-public abstract class AbstractCommandManager implements CommandExecutor {
+public abstract class AbstractCommandManager extends Component implements CommandExecutor {
     private final Set<SubCommand> commands;
     private JavaPlugin main;
 
