@@ -26,23 +26,25 @@ public class CommandManager extends AbstractCommandManager {
             return false;
         }
         for (SubCommand subCommand : super.getCommands()) {
-            if (subCommand.name().equalsIgnoreCase(strings[0])) {
-                if (commandSender.hasPermission(subCommand.requiredPermissions()) || commandSender.isOp())
+            if (subCommand.name().equalsIgnoreCase(strings[0]) || (subCommand.aliases().isPresent() && contains(subCommand.aliases().get(), strings[0]))) {
+                if (commandSender.hasPermission(subCommand.requiredPermissions()) || commandSender.isOp()) {
                     return subCommand.onCommand(commandSender, Arrays.copyOfRange(strings, 1, strings.length));
-                else {
+                } else {
                     commandSender.sendMessage(PluginStrings.noPerms());
                     return false;
                 }
-            } else {
-                if (subCommand.aliases().isPresent())
-                    for (String alias : subCommand.aliases().get()) {
-                        if (alias.equalsIgnoreCase(strings[0])) {
-                            return subCommand.onCommand(commandSender, strings);
-                        }
-                    }
             }
         }
         commandSender.sendMessage(PluginStrings.tag() + " Unknown Command!");
+        return false;
+    }
+
+
+    private static boolean contains(String[] arr, String target) {
+        for (String str : arr) {
+            if (str.equalsIgnoreCase(target))
+                return true;
+        }
         return false;
     }
 }

@@ -16,14 +16,16 @@ public abstract class PluginStrings {
     private static String CMD_LABEL_WITH_SLASH;
 
 
+
     public static void setup(JavaPlugin plugin, ChatColor main, ChatColor secondary, String nameForTag, String commandLabel) {
         MAIN_COLOR = main;
         SECONDARY_COLOR = secondary;
         TAG = secondary + "[" + main + (nameForTag == null ? plugin.getDescription().getName() : nameForTag) + secondary + "]" + ChatColor.RESET;
         INVALID_SYNTAX = TAG + ChatColor.RED + " Invalid syntax! Correct syntax is ";
         NO_PERMS = TAG + ChatColor.RED + " You do not have permission to use this command!";
-        CMD_LABEL =commandLabel;
-        CMD_LABEL_WITH_SLASH="/"+CMD_LABEL;
+        CMD_LABEL = commandLabel;
+        CMD_LABEL_WITH_SLASH = "/" + CMD_LABEL;
+
     }
 
     public static String tag() {
