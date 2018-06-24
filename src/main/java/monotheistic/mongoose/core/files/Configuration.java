@@ -15,9 +15,10 @@ public class Configuration {
     private Path file;
 
     public Configuration(JavaPlugin plugin, String file) {
-        if (!Files.exists(Paths.get(plugin.getDataFolder() + File.separator + file)))
-            plugin.saveResource(file, false);
         this.file = Paths.get(plugin.getDataFolder() + File.separator + file);
+        if (!Files.exists(file))
+            plugin.saveResource(file, false);
+
         this.config = FileUtils.loadConfig(this.file.toFile());
     }
 
