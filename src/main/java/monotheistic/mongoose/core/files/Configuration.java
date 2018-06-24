@@ -5,6 +5,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Objects;
@@ -14,7 +15,8 @@ public class Configuration {
     private Path file;
 
     public Configuration(JavaPlugin plugin, String file) {
-        plugin.saveResource(file, false);
+        if (!Files.exists(Paths.get(plugin.getDataFolder() + File.separator + file)))
+            plugin.saveResource(file, false);
         this.file = Paths.get(plugin.getDataFolder() + File.separator + file);
         this.config = FileUtils.loadConfig(this.file.toFile());
     }
