@@ -14,7 +14,7 @@ public abstract class PluginStrings {
     private static String NO_PERMS;
     private static String CMD_LABEL;
     private static String CMD_LABEL_WITH_SLASH;
-
+    private static String MUST_BE_PLAYER;
 
 
     public static void setup(JavaPlugin plugin, ChatColor main, ChatColor secondary, String nameForTag, String commandLabel) {
@@ -25,6 +25,7 @@ public abstract class PluginStrings {
         NO_PERMS = TAG + ChatColor.RED + " You do not have permission to use this command!";
         CMD_LABEL = commandLabel;
         CMD_LABEL_WITH_SLASH = "/" + CMD_LABEL;
+        MUST_BE_PLAYER = TAG + ChatColor.RED + " You must be a player in order to use this command!";
 
     }
 
@@ -50,6 +51,10 @@ public abstract class PluginStrings {
 
     public static String noPerms() {
         return NO_PERMS;
+    }
+
+    public static String mustBeAPlayer() {
+        return MUST_BE_PLAYER;
     }
 
 
