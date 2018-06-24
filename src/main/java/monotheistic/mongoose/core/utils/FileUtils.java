@@ -19,7 +19,7 @@ public interface FileUtils {
     }
 
     static FileConfiguration loadConfig(File file) {
-        return save(file, YamlConfiguration.loadConfiguration(file));
+        return YamlConfiguration.loadConfiguration(file);
 
     }
 

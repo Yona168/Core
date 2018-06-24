@@ -16,7 +16,7 @@ public class Configuration {
 
     public Configuration(JavaPlugin plugin, String file) {
         this.file = Paths.get(plugin.getDataFolder() + File.separator + file);
-        if (!Files.exists(file))
+        if (!Files.exists(this.file))
             plugin.saveResource(file, false);
 
         this.config = FileUtils.loadConfig(this.file.toFile());
