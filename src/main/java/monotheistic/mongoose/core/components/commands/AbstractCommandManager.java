@@ -17,6 +17,7 @@ public abstract class AbstractCommandManager extends Component implements Comman
         this(javaPlugin);
         this.commands.addAll(commands);
         onDisable(() -> commands.forEach(Toggleable::disable));
+        onEnable(() -> commands.forEach(Toggleable::enable));
     }
 
     public AbstractCommandManager(final JavaPlugin javaPlugin) {
