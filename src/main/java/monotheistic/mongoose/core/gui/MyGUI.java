@@ -14,29 +14,13 @@ import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
-import static com.gitlab.avelyn.core.base.Events.listen;
-
 public class MyGUI {
     private Inventory inventory;
 
-    static {
-      listen((InventoryClickEvent event) -> {
-            if (event.getClickedInventory() == null)
-                return;
-            final InventoryHolder holder = event.getClickedInventory().getHolder();
-            if (holder instanceof InventoryHolderImpl) {
-                event.setCancelled(true);
-                Consumer<InventoryClickEvent> action = ((InventoryHolderImpl) holder).listeners.get(event.getCurrentItem());
-                if (action != null) {
-                    action.accept(event);
-                }
-            }
-        }).enable();
-    }
-
     public MyGUI(String name, int size, Map<ItemStack, Consumer<InventoryClickEvent>> listeners) {
         inventory = Bukkit.createInventory(new InventoryHolderImpl(listeners), size, name);
-        inventory.setContents(listeners.keySet().toArray(new ItemStack[size]));
+        if (listeners != null)
+            inventory.setContents(listeners.keySet().toArray(new ItemStack[size]));
 
     }
 
