@@ -84,8 +84,8 @@ public class MyGUI {
     }
 
 
-    private class InventoryHolderImpl implements InventoryHolder {
-        private final Map<ItemStack, Consumer<InventoryClickEvent>> listeners;
+    protected class InventoryHolderImpl implements InventoryHolder {
+        final Map<ItemStack, Consumer<InventoryClickEvent>> listeners;
 
         InventoryHolderImpl(Map<ItemStack, Consumer<InventoryClickEvent>> listeners) {
             this.listeners = listeners;
