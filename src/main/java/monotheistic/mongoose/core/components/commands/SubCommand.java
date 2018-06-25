@@ -1,5 +1,6 @@
 package monotheistic.mongoose.core.components.commands;
 
+import com.gitlab.avelyn.architecture.base.Component;
 import monotheistic.mongoose.core.strings.PluginStrings;
 import org.bukkit.command.CommandSender;
 
@@ -7,7 +8,7 @@ import java.util.Arrays;
 import java.util.Objects;
 import java.util.Optional;
 
-public abstract class SubCommand {
+public abstract class SubCommand extends Component {
     private final String name;
     private final String desription;
     private final String[] aliases;
