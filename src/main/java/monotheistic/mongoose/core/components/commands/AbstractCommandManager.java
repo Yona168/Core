@@ -2,6 +2,7 @@ package monotheistic.mongoose.core.components.commands;
 
 
 import com.gitlab.avelyn.architecture.base.Component;
+import com.gitlab.avelyn.architecture.base.Toggleable;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -15,6 +16,7 @@ public abstract class AbstractCommandManager extends Component implements Comman
     public AbstractCommandManager(final JavaPlugin javaPlugin, final Collection<SubCommand> commands) {
         this(javaPlugin);
         this.commands.addAll(commands);
+        onDisable(() -> commands.forEach(Toggleable::disable));
     }
 
     public AbstractCommandManager(final JavaPlugin javaPlugin) {
@@ -30,6 +32,7 @@ public abstract class AbstractCommandManager extends Component implements Comman
         add(supplier.apply(this));
         return this;
     }
+
 
     public void remove(final String nameOfCommand) {
         commands.stream().filter(command -> command.name().equalsIgnoreCase(nameOfCommand)).forEach(commands::remove);
