@@ -13,6 +13,9 @@ public abstract class AbstractCommandManager extends Component implements Comman
     private final Set<SubCommand> commands;
     private JavaPlugin main;
 
+    public AbstractCommandManager(final JavaPlugin plugin, SubCommand... commands) {
+        this(plugin, Arrays.asList(commands));
+    }
     public AbstractCommandManager(final JavaPlugin javaPlugin, final Collection<SubCommand> commands) {
         this(javaPlugin);
         this.commands.addAll(commands);
