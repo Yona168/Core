@@ -17,11 +17,16 @@ public abstract class AbstractCommandManager extends Component implements Comman
         this(javaPlugin);
         this.commands.addAll(commands);
         onDisable(() -> commands.forEach(Toggleable::disable));
-        onEnable(() -> commands.forEach(Toggleable::enable));
     }
 
+    public AbstractCommandManager enableComponentCommands() {
+        commands.forEach(Toggleable::enable);
+        return this;
+    }
+
+
     public AbstractCommandManager(final JavaPlugin javaPlugin) {
-        this.main=javaPlugin;
+        this.main = javaPlugin;
         this.commands = Collections.newSetFromMap(new IdentityHashMap<>());
     }
 
@@ -29,7 +34,8 @@ public abstract class AbstractCommandManager extends Component implements Comman
         this.commands.add(command);
         return this;
     }
-    public AbstractCommandManager add(final Function<AbstractCommandManager, SubCommand> supplier){
+
+    public AbstractCommandManager add(final Function<AbstractCommandManager, SubCommand> supplier) {
         add(supplier.apply(this));
         return this;
     }
