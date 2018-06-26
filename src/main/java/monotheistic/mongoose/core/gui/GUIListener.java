@@ -16,7 +16,10 @@ public class GUIListener extends Component {
             final InventoryHolder holder = event.getClickedInventory().getHolder();
             if (holder instanceof MyGUI.InventoryHolderImpl) {
                 event.setCancelled(true);
-                Consumer<InventoryClickEvent> action = ((MyGUI.InventoryHolderImpl) holder).listeners.get(event.getCurrentItem());
+
+                final MyGUI.InventoryHolderImpl inventoryHolder = (MyGUI.InventoryHolderImpl) holder;
+                inventoryHolder.allTimeListeners.forEach(listener -> listener.accept(event));
+                Consumer<InventoryClickEvent> action = inventoryHolder.listeners.get(event.getCurrentItem());
                 if (action != null) {
                     action.accept(event);
                 }

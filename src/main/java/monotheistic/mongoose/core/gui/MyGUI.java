@@ -10,22 +10,25 @@ import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 public class MyGUI {
     private Inventory inventory;
 
-    public MyGUI(String name, int size, Map<ItemStack, Consumer<InventoryClickEvent>> listeners) {
-        inventory = Bukkit.createInventory(new InventoryHolderImpl(listeners), size, name);
+    public MyGUI(String name, int size, Map<ItemStack, Consumer<InventoryClickEvent>> listeners, Set<Consumer<InventoryClickEvent>> allTimeListeners) {
+        inventory = Bukkit.createInventory(new InventoryHolderImpl(listeners, allTimeListeners), size, name);
         if (listeners != null)
             inventory.setContents(listeners.keySet().toArray(new ItemStack[size]));
 
     }
 
     public MyGUI(String name, int size) {
-        this(name, size, null);
+        this(name, size, null, null);
     }
 
     public MyGUI set(int slot, ItemStack item, Consumer<InventoryClickEvent> eventConsumer) {
@@ -34,8 +37,17 @@ public class MyGUI {
         return this;
     }
 
+    public MyGUI addAllTimeListener(Consumer<InventoryClickEvent> inventoryClickEventConsumer) {
+        getAllTimeListeners().add(inventoryClickEventConsumer);
+        return this;
+    }
+
     private Map<ItemStack, Consumer<InventoryClickEvent>> getListeners() {
         return ((InventoryHolderImpl) this.inventory.getHolder()).listeners;
+    }
+
+    public Set<Consumer<InventoryClickEvent>> getAllTimeListeners() {
+        return ((InventoryHolderImpl) this.inventory.getHolder()).allTimeListeners;
     }
 
     public void open(final Player player) {
@@ -70,9 +82,11 @@ public class MyGUI {
 
     protected class InventoryHolderImpl implements InventoryHolder {
         final Map<ItemStack, Consumer<InventoryClickEvent>> listeners;
+        final Set<Consumer<InventoryClickEvent>> allTimeListeners;
 
-        InventoryHolderImpl(Map<ItemStack, Consumer<InventoryClickEvent>> listeners) {
-            this.listeners = listeners;
+        InventoryHolderImpl(Map<ItemStack, Consumer<InventoryClickEvent>> listeners, Set<Consumer<InventoryClickEvent>> allTimeListeners) {
+            this.listeners = listeners == null ? new HashMap<>() : listeners;
+            this.allTimeListeners = allTimeListeners == null ? new HashSet<>() : allTimeListeners;
         }
 
         @Override
@@ -90,7 +104,7 @@ public class MyGUI {
                 inv.setItem(i, item);
             }
             //BOTTOM
-            for (int i = inv.getSize()-9; i<inv.getSize(); i++) {
+            for (int i = inv.getSize() - 9; i < inv.getSize(); i++) {
                 inv.setItem(i, item);
             }
             //LEFT
@@ -98,7 +112,7 @@ public class MyGUI {
                 inv.setItem(i, item);
             }
             //RIGHT
-            for (int i = 8; i<inv.getSize(); i+=9) {
+            for (int i = 8; i < inv.getSize(); i += 9) {
                 inv.setItem(i, item);
             }
         });
