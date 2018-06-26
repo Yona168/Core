@@ -1,6 +1,10 @@
 # Core
 [![](https://jitpack.io/v/Yona168/Core.svg)](https://jitpack.io/#Yona168/Core)
 
+**NOTE: THIS README IS OUTDATED. PLEASE CONTACT ME FOR ASSISTANCE
+IF YOU NEED IT UNTIL I UPDATE THIS/MAKE SOMETHING ELSE**
+
+Discord: Yona168#5564
 
 First off, credit's due where credit is due. This core makes use of:
 1: Avelyn core, for events. -> https://gitlab.com/Avelyn/Architecture

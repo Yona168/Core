@@ -2,7 +2,7 @@ package monotheistic.mongoose.core.components.playerdata.transactions;
 
 import monotheistic.mongoose.core.components.playerdata.PlayerData;
 import monotheistic.mongoose.core.components.playerdata.database.Database;
-import monotheistic.mongoose.core.components.playerdata.modifiers.economy.EcoPlayer;
+import monotheistic.mongoose.core.components.playerdata.modules.economy.EcoPlayer;
 import monotheistic.mongoose.core.strings.PluginStrings;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -30,10 +30,10 @@ public class EconomyTransaction extends Transaction {
         if (allAreNull()) {
             throw new IllegalArgumentException("Both objects implementing EcoPlayer cannot be null!");
         } else if (ecoGiver != null) {
-            ecoGiver.take(super.getAmt());
+            ecoGiver.takeBalance(super.getAmt());
             super.getGiver().sendMessage(PluginStrings.tag() + ChatColor.GREEN + " Transaction complete.");
         } else if (taker != null) {
-            ecoTaker.give(super.getAmt());
+            ecoTaker.giveBalance(super.getAmt());
             super.getTaker().sendMessage(PluginStrings.tag() + ChatColor.GREEN + " Transaction complete.");
         }
         return true;

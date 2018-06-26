@@ -2,7 +2,7 @@ package monotheistic.mongoose.core.components.playerdata.transactions;
 
 import monotheistic.mongoose.core.components.playerdata.PlayerData;
 import monotheistic.mongoose.core.components.playerdata.database.Database;
-import monotheistic.mongoose.core.components.playerdata.modifiers.xp.XPPlayer;
+import monotheistic.mongoose.core.components.playerdata.modules.xp.XPPlayer;
 import monotheistic.mongoose.core.strings.PluginStrings;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;

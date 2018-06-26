@@ -1,6 +1,5 @@
 package monotheistic.mongoose.core.components.playerdata.transactions;
 
-import monotheistic.mongoose.core.components.playerdata.PlayerData;
 import monotheistic.mongoose.core.components.playerdata.database.Database;
 import org.bukkit.entity.Player;
 
@@ -14,27 +13,28 @@ public abstract class Transaction {
         this.giver = giver;
         this.taker = taker;
         this.amt = amt;
-        this.database=database;
+        this.database = database;
     }
 
-     boolean allAreNull() {
+    boolean allAreNull() {
         return (giver == null && taker == null);
     }
 
     public abstract boolean execute();
 
-     Player getGiver() {
+    Player getGiver() {
         return giver;
     }
 
-     Player getTaker() {
+    Player getTaker() {
         return taker;
     }
 
     double getAmt() {
         return amt;
     }
-    Database getDatabase(){
+
+    Database getDatabase() {
         return this.database;
     }
 }
