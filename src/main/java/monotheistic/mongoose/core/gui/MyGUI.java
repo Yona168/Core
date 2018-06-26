@@ -17,11 +17,15 @@ import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
-public class MyGUI {
+public class MyGUI implements InventoryHolder {
     private Inventory inventory;
+    final Map<ItemStack, Consumer<InventoryClickEvent>> listeners;
+    final Set<Consumer<InventoryClickEvent>> allTimeListeners;
 
     public MyGUI(String name, int size, Map<ItemStack, Consumer<InventoryClickEvent>> listeners, Set<Consumer<InventoryClickEvent>> allTimeListeners) {
-        inventory = Bukkit.createInventory(new InventoryHolderImpl(listeners, allTimeListeners), size, name);
+        this.listeners = listeners == null ? new HashMap<>() : listeners;
+        this.allTimeListeners = allTimeListeners == null ? new HashSet<>() : allTimeListeners;
+        inventory = Bukkit.createInventory(this, size, name);
         if (listeners != null)
             inventory.setContents(listeners.keySet().toArray(new ItemStack[size]));
 
@@ -37,17 +41,27 @@ public class MyGUI {
         return this;
     }
 
+    public MyGUI set(ItemStack item, int slot) {
+        inventory.setItem(slot, item);
+        return this;
+    }
+
+    public MyGUI addItems(ItemStack... items) {
+        inventory.addItem(items);
+        return this;
+    }
+
     public MyGUI addAllTimeListener(Consumer<InventoryClickEvent> inventoryClickEventConsumer) {
         getAllTimeListeners().add(inventoryClickEventConsumer);
         return this;
     }
 
     private Map<ItemStack, Consumer<InventoryClickEvent>> getListeners() {
-        return ((InventoryHolderImpl) this.inventory.getHolder()).listeners;
+        return listeners;
     }
 
-    public Set<Consumer<InventoryClickEvent>> getAllTimeListeners() {
-        return ((InventoryHolderImpl) this.inventory.getHolder()).allTimeListeners;
+    private Set<Consumer<InventoryClickEvent>> getAllTimeListeners() {
+        return allTimeListeners;
     }
 
     public void open(final Player player) {
@@ -79,22 +93,11 @@ public class MyGUI {
         };
     }
 
-
-    protected class InventoryHolderImpl implements InventoryHolder {
-        final Map<ItemStack, Consumer<InventoryClickEvent>> listeners;
-        final Set<Consumer<InventoryClickEvent>> allTimeListeners;
-
-        InventoryHolderImpl(Map<ItemStack, Consumer<InventoryClickEvent>> listeners, Set<Consumer<InventoryClickEvent>> allTimeListeners) {
-            this.listeners = listeners == null ? new HashMap<>() : listeners;
-            this.allTimeListeners = allTimeListeners == null ? new HashSet<>() : allTimeListeners;
-        }
-
-        @Override
-        public Inventory getInventory() {
-            return null;
-        }
-
+    @Override
+    public Inventory getInventory() {
+        return inventory;
     }
+
 
     //Decoration Things
     public enum PatternType {

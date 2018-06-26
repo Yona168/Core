@@ -21,6 +21,10 @@ public class ItemBuilder {
         this.meta = itemStack.getItemMeta();
     }
 
+    public static ItemBuilder copyOf(ItemStack itemStack) {
+        return new ItemBuilder(new ItemStack(itemStack));
+    }
+
     public ItemBuilder(Material material) {
         this(new ItemStack(material));
     }

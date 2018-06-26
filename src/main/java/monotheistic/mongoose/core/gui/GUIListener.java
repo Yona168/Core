@@ -3,6 +3,7 @@ package monotheistic.mongoose.core.gui;
 import com.gitlab.avelyn.architecture.base.Component;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.InventoryHolder;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.function.Consumer;
 
@@ -14,16 +15,22 @@ public class GUIListener extends Component {
             if (event.getClickedInventory() == null)
                 return;
             final InventoryHolder holder = event.getClickedInventory().getHolder();
-            if (holder instanceof MyGUI.InventoryHolderImpl) {
+            if (holder instanceof MyGUI) {
                 event.setCancelled(true);
-
-                final MyGUI.InventoryHolderImpl inventoryHolder = (MyGUI.InventoryHolderImpl) holder;
-                inventoryHolder.allTimeListeners.forEach(listener -> listener.accept(event));
-                Consumer<InventoryClickEvent> action = inventoryHolder.listeners.get(event.getCurrentItem());
+                final MyGUI gui = (MyGUI) holder;
+                final ItemStack currentItem = event.getCurrentItem();
+                if (currentItem == null)
+                    return;
+                gui.allTimeListeners.forEach(listener -> listener.accept(event));
+                final Consumer<InventoryClickEvent> action = gui.listeners.get(currentItem);
                 if (action != null) {
                     action.accept(event);
                 }
             }
         }));
+        onDisable(() -> {
+            PaginatorGUI.EMERALD_FORWARDS = null;
+            PaginatorGUI.REDSTONE_BACK = null;
+        });
     }
 }
