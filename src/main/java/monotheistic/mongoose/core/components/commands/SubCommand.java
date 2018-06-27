@@ -15,18 +15,20 @@ public abstract class SubCommand extends Component {
     private final String requiredPermissions;
     private final String usage;
     private final String invalidSyntax;
+    int id;
 
-    public SubCommand(String name, String desription, String usage, String[] aliases) {
-        this.desription=desription;
-        this.name=name;
-        this.aliases=aliases;
+    public SubCommand(String name, String desription, String usage, String[] aliases, int id) {
+        this.desription = desription;
+        this.name = name;
+        this.aliases = aliases;
         requiredPermissions = PluginStrings.mainCmdLabel(false) + ".commands." + name();
-        this.usage = PluginStrings.mainCmdLabel(true) + " "+usage;
+        this.usage = PluginStrings.mainCmdLabel(true) + " " + usage;
         invalidSyntax = PluginStrings.invalidSyntax() + usage();
+        this.id = id;
     }
 
-    public SubCommand(String name, String desription, String usage) {
-        this(name, desription, usage, null);
+    public SubCommand(String name, String desription, String usage, int id) {
+        this(name, desription, usage, null, id);
     }
 
     protected abstract boolean onCommand(CommandSender sender, String[] args);

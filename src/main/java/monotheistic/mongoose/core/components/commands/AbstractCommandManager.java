@@ -16,9 +16,17 @@ public abstract class AbstractCommandManager extends Component implements Comman
     public AbstractCommandManager(final JavaPlugin plugin, SubCommand... commands) {
         this(plugin, Arrays.asList(commands));
     }
+
     public AbstractCommandManager(final JavaPlugin javaPlugin, final Collection<SubCommand> commands) {
         this(javaPlugin);
         this.commands.addAll(commands);
+    }
+
+    public AbstractCommandManager(final JavaPlugin javaPlugin) {
+        this.main = javaPlugin;
+        this.commands = Collections.newSetFromMap(new IdentityHashMap<>());
+        onEnable(() -> commands.forEach(Toggleable::enable));
+        onDisable(() -> commands.forEach(Toggleable::disable));
     }
 
     public AbstractCommandManager enableComponentCommands() {
@@ -26,12 +34,24 @@ public abstract class AbstractCommandManager extends Component implements Comman
         return this;
     }
 
+    public AbstractCommandManager disableByName(String name) {
+        commands.stream().filter(cmd -> cmd.name().equalsIgnoreCase(name)).findFirst().map(Component::disable);
+        return this;
+    }
 
-    public AbstractCommandManager(final JavaPlugin javaPlugin) {
-        this.main = javaPlugin;
-        this.commands = Collections.newSetFromMap(new IdentityHashMap<>());
-        onEnable(() -> commands.forEach(Toggleable::enable));
-        onDisable(() -> commands.forEach(Toggleable::disable));
+    public AbstractCommandManager enableByName(String name) {
+        commands.stream().filter(cmd -> cmd.name().equalsIgnoreCase(name)).findFirst().map(Component::disable);
+        return this;
+    }
+
+    public AbstractCommandManager disableByID(int id) {
+        commands.stream().filter(cmd -> cmd.id == id).findFirst().map(Component::disable);
+        return this;
+    }
+
+    public AbstractCommandManager enableByID(int id) {
+        commands.stream().filter(cmd -> cmd.id == id).findFirst().map(Component::disable);
+        return this;
     }
 
     public AbstractCommandManager add(final SubCommand command) {
@@ -46,7 +66,11 @@ public abstract class AbstractCommandManager extends Component implements Comman
 
 
     public void remove(final String nameOfCommand) {
-        commands.stream().filter(command -> command.name().equalsIgnoreCase(nameOfCommand)).forEach(commands::remove);
+        commands.stream().filter(command -> command.name().equalsIgnoreCase(nameOfCommand)).findFirst().map(commands::remove);
+    }
+
+    public void remove(final int id) {
+        commands.stream().filter(command -> command.id == id).findFirst().map(commands::remove);
     }
 
     public Set<SubCommand> getCommands() {
