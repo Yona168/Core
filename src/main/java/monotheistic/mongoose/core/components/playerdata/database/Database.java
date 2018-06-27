@@ -23,11 +23,10 @@ public abstract class Database extends Component {
     private short backup;
     private Map<Player, PlayerData> cache;
     private BukkitRunnable backupRunnable;
-    private boolean first = true;
+
 
     public Database(JavaPlugin main, Supplier<PlayerData> function) {
         this.playerPlayerDataFunction = function;
-        cache = new IdentityHashMap<>();
         addChild(listen((PlayerJoinEvent event) -> {
             final Player player = event.getPlayer();
             final PlayerData data = fromStorage(player).orElseGet(() ->
@@ -40,19 +39,24 @@ public abstract class Database extends Component {
                     cache.remove(event.getPlayer());
                 })));
 
-        backupRunnable = new BukkitRunnable() {
-            @Override
-            public void run() {
-                backup();
-            }
-        };
-        onEnable(() -> scheduleBackups(main));
-        onDisable(this::disableBackup);
+
+        onEnable(() -> {
+            cache = new IdentityHashMap<>();
+            scheduleBackups(main, true);
+            backupRunnable = new BukkitRunnable() {
+                @Override
+                public void run() {
+                    backup();
+                }
+            };
+        });
+        onDisable(() -> {
+            disableBackup();
+            backupRunnable = null;
+            cache = null;
+        });
     }
 
-    public void onDisable(JavaPlugin plugin) {
-        backup();
-    }
 
     private void backup() {
         cache.forEach(Database.this::write);
@@ -77,11 +81,10 @@ public abstract class Database extends Component {
 
     public abstract boolean isRegistered(UUID uuid);
 
-    private void scheduleBackups(JavaPlugin main) {
+    private void scheduleBackups(JavaPlugin main, boolean first) {
         if (backupIsEnabled()) {
             if (!first && backupRunnable.isCancelled())
                 backupRunnable.cancel();
-            else first = false;
             backupRunnable.runTaskTimer(main, 0, backup * 20 * 60);
         }
     }
@@ -89,12 +92,11 @@ public abstract class Database extends Component {
 
     public void setBackup(short backupMins, JavaPlugin main) {
         this.backup = backupMins;
-        scheduleBackups(main);
+        scheduleBackups(main, false);
     }
 
     void disableBackup() {
         backupRunnable.cancel();
-        this.first = true;
     }
 
     public boolean backupIsEnabled() {
