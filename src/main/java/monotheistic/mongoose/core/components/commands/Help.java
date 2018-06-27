@@ -9,7 +9,7 @@ public class Help extends SubCommand {
     final AbstractCommandManager commandManager;
 
     public Help(AbstractCommandManager commandManager) {
-        super("help", "Displays commands and their descriptions", "help [page]", null);
+        super("help", "Displays commands and their descriptions", "help [page]", 1);
         this.commandManager = commandManager;
     }
 

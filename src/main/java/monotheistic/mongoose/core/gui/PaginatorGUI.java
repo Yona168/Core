@@ -88,7 +88,7 @@ public class PaginatorGUI {
     }
 
     private static String titleForPage(String title, int page) {
-        return title + " " + page;
+        return title + ": " + page;
     }
 
     public void open(Player player) {
