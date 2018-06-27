@@ -15,8 +15,8 @@ import java.util.function.Consumer;
 
 public class PaginatorGUI {
     private List<MyGUI> pages;
-    static ItemStack REDSTONE_BACK = new ItemBuilder(Material.REDSTONE_BLOCK).name(ChatColor.GOLD + "<- Back").addItemFlags(ItemFlag.HIDE_ATTRIBUTES).build();
-    static ItemStack EMERALD_FORWARDS = new ItemBuilder(Material.EMERALD_BLOCK).name(ChatColor.GOLD + "Next ->").addItemFlags(ItemFlag.HIDE_ATTRIBUTES).build();
+    static ItemStack REDSTONE_BACK;
+    static ItemStack EMERALD_FORWARDS;
 
     private int currentPage;
 
