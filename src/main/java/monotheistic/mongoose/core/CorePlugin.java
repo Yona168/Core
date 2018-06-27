@@ -26,6 +26,7 @@ public abstract class CorePlugin extends ComponentPlugin {
         Configuration dbOptions = new Configuration(this, "dboptions.yml");
         if (dbOptions.configuration().getBoolean("database.do backup"))
             database.setBackup((short) dbOptions.configuration().getInt("database.every"), this);
+        addChild(database);
         return database;
     }
 

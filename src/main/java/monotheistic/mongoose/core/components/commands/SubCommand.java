@@ -42,7 +42,7 @@ public abstract class SubCommand extends Component {
     }
 
     public Optional<String[]> aliases() {
-        return aliases == null ? Optional.empty() : Optional.of(aliases);
+        return Optional.ofNullable(aliases);
     }
 
     public String usage() {

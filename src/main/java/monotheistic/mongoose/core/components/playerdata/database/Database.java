@@ -1,5 +1,6 @@
 package monotheistic.mongoose.core.components.playerdata.database;
 
+import com.gitlab.avelyn.architecture.base.Component;
 import monotheistic.mongoose.core.components.playerdata.PlayerData;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -16,7 +17,7 @@ import java.util.function.Supplier;
 
 import static com.gitlab.avelyn.core.base.Events.listen;
 
-public abstract class Database {
+public abstract class Database extends Component {
 
     private final Supplier<PlayerData> playerPlayerDataFunction;
     private short backup;
@@ -27,17 +28,17 @@ public abstract class Database {
     public Database(JavaPlugin main, Supplier<PlayerData> function) {
         this.playerPlayerDataFunction = function;
         cache = new IdentityHashMap<>();
-        listen((PlayerJoinEvent event) -> {
+        addChild(listen((PlayerJoinEvent event) -> {
             final Player player = event.getPlayer();
             final PlayerData data = fromStorage(player).orElseGet(() ->
                     write(player, createData()));
             cache.put(player, data);
-        }).enable();
-        listen((PlayerQuitEvent event) ->
+        }));
+        addChild(listen((PlayerQuitEvent event) ->
                 fromCache(event.getPlayer()).ifPresent(playerData -> {
                     write(event.getPlayer(), playerData);
                     cache.remove(event.getPlayer());
-                })).enable();
+                })));
 
         backupRunnable = new BukkitRunnable() {
             @Override
@@ -45,8 +46,8 @@ public abstract class Database {
                 backup();
             }
         };
-        scheduleBackups(main);
-
+        onEnable(() -> scheduleBackups(main));
+        onDisable(this::disableBackup);
     }
 
     public void onDisable(JavaPlugin plugin) {
@@ -59,7 +60,7 @@ public abstract class Database {
 
     public Optional<PlayerData> fromCache(Player player) {
         final PlayerData data = cache.get(player);
-        return data == null ? Optional.empty() : Optional.of(data);
+        return Optional.ofNullable(data);
     }
 
     public abstract Optional<PlayerData> fromStorage(Player player);
@@ -85,6 +86,7 @@ public abstract class Database {
         }
     }
 
+
     public void setBackup(short backupMins, JavaPlugin main) {
         this.backup = backupMins;
         scheduleBackups(main);
@@ -92,6 +94,7 @@ public abstract class Database {
 
     void disableBackup() {
         backupRunnable.cancel();
+        this.first = true;
     }
 
     public boolean backupIsEnabled() {
