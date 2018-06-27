@@ -18,8 +18,9 @@ public class GUIListener extends Component {
                 return;
             final InventoryHolder holder = event.getView().getTopInventory().getHolder();
             if (holder instanceof MyGUI) {
+                event.setCancelled(true);
                 if (clicked.getHolder() != null && clicked.getHolder() == holder) {
-                    event.setCancelled(true);
+
                     final MyGUI gui = (MyGUI) holder;
                     final ItemStack currentItem = event.getCurrentItem();
                     if (currentItem == null)
