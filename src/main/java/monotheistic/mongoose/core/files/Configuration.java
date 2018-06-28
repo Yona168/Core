@@ -38,6 +38,9 @@ public class Configuration {
         return file;
     }
 
+    public Object get(String key) {
+        return config.get(key);
+    }
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
