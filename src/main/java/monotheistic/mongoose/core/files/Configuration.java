@@ -22,12 +22,14 @@ public class Configuration {
         this.config = FileUtils.loadConfig(this.file.toFile());
     }
 
-    public void save() {
+    public Configuration save() {
         FileUtils.save(file.toFile(), config);
+        return this;
     }
 
-    public void reload() {
+    public Configuration reload() {
         FileUtils.reload(file.toFile(), config);
+        return this;
     }
 
     public FileConfiguration configuration() {
@@ -41,6 +43,7 @@ public class Configuration {
     public Object get(String key) {
         return config.get(key);
     }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
