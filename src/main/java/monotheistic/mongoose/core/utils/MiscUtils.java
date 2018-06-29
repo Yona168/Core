@@ -1,14 +1,14 @@
 package monotheistic.mongoose.core.utils;
 
-import java.util.Optional;
+import java.util.OptionalInt;
 
 public interface MiscUtils {
-    static Optional<Integer> parseInt(String string) {
+    static OptionalInt parseInt(String string) {
         try {
-            return Optional.of(Integer.parseInt(string));
+            return OptionalInt.of(Integer.parseInt(string));
         } catch (NumberFormatException e) {
             e.printStackTrace();
-            return Optional.empty();
+            return OptionalInt.empty();
         }
     }
 }
