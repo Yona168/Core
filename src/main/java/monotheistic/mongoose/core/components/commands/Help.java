@@ -27,9 +27,9 @@ public class Help extends SubCommand {
         }
         final ChatColor first = PluginStrings.mainColor();
         final ChatColor second = PluginStrings.secondaryColor();
-        final StringBuilder sending = new StringBuilder(second + "---" + PluginStrings.tag() + first + "Page: " + num + second + "---");
+        final StringBuilder sending = new StringBuilder(second + "---" + PluginStrings.tag() + first + " Page: " + num + second + "---");
         commandManager.getCommands().stream().skip((num-1) * 5).limit(5).map(command ->
-                "\n"+first + command.name() + ChatColor.WHITE + ": " + second + command.description()).forEach(sending::append);
+                "\n" + second + ChatColor.BOLD + "> " + ChatColor.RESET + first + command.name() + ChatColor.WHITE + ": " + second + command.description()).forEach(sending::append);
         sender.sendMessage(sending.toString());
         return true;
     }
