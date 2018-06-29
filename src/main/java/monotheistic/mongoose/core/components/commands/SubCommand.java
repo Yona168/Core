@@ -13,6 +13,7 @@ public abstract class SubCommand extends Component {
     private final String desription;
     private final String[] aliases;
     private final String requiredPermissions;
+    private final String requiredPermissionsWithUse;
     private final String usage;
     private final String invalidSyntax;
     int id;
@@ -21,7 +22,8 @@ public abstract class SubCommand extends Component {
         this.desription = desription;
         this.name = name;
         this.aliases = aliases;
-        requiredPermissions = PluginStrings.mainCmdLabel(false) + ".commands." + name() + ".use";
+        requiredPermissions = PluginStrings.mainCmdLabel(false) + ".commands." + name();
+        requiredPermissionsWithUse = requiredPermissions + ".use";
         this.usage = PluginStrings.mainCmdLabel(true) + " " + usage;
         invalidSyntax = PluginStrings.invalidSyntax() + usage();
         this.id = id;
@@ -49,8 +51,8 @@ public abstract class SubCommand extends Component {
         return usage;
     }
 
-    public String requiredPermissions() {
-        return requiredPermissions;
+    public String requiredPermissions(boolean withUse) {
+        return withUse ? requiredPermissionsWithUse : requiredPermissions;
     }
 
     public String invalidSyntax() {
