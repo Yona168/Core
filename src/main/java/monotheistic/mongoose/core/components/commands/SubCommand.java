@@ -23,7 +23,7 @@ public abstract class SubCommand extends Component {
         this.aliases = aliases;
         requiredPermissions = PluginStrings.mainCmdLabel(false) + ".commands." + name();
         this.usage = PluginStrings.mainCmdLabel(true) + " " + usage;
-        invalidSyntax = PluginStrings.invalidSyntax() + usage();
+        invalidSyntax = PluginStrings.invalidSyntax() + usage() + ".use";
         this.id = id;
     }
 
