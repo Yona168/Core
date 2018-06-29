@@ -11,27 +11,27 @@ public class ScheduleUtils {
         ScheduleUtils.main = plugin;
     }
 
-    public static void sync(Runnable runnable) {
-        Bukkit.getScheduler().runTask(main, runnable);
+    public static BukkitTask sync(Runnable runnable) {
+        return Bukkit.getScheduler().runTask(main, runnable);
     }
 
     static BukkitTask async(Runnable runnable) {
         return Bukkit.getScheduler().runTaskAsynchronously(main, runnable);
     }
 
-    public static void repeatingSync(Runnable runnable, long everyTicks, boolean startingNow) {
-        Bukkit.getScheduler().runTaskTimer(main, runnable, startingNow ? 0 : everyTicks, everyTicks);
+    public static BukkitTask repeatingSync(Runnable runnable, long everyTicks, boolean startingNow) {
+        return Bukkit.getScheduler().runTaskTimer(main, runnable, startingNow ? 0 : everyTicks, everyTicks);
     }
 
-    public static void repeatingAsync(Runnable runnable, long everyTicks, boolean startingNow) {
-        Bukkit.getScheduler().runTaskTimerAsynchronously(main, runnable, startingNow ? 0 : everyTicks, everyTicks);
+    public static BukkitTask repeatingAsync(Runnable runnable, long everyTicks, boolean startingNow) {
+        return Bukkit.getScheduler().runTaskTimerAsynchronously(main, runnable, startingNow ? 0 : everyTicks, everyTicks);
     }
 
-    public static void laterSync(Runnable runnable, long delay) {
-        Bukkit.getScheduler().runTaskLater(main, runnable, delay);
+    public static BukkitTask laterSync(Runnable runnable, long delay) {
+        return Bukkit.getScheduler().runTaskLater(main, runnable, delay);
     }
 
-    public static void laterAsync(Runnable runnable, long delay) {
-        Bukkit.getScheduler().runTaskLaterAsynchronously(main, runnable, delay);
+    public static BukkitTask laterAsync(Runnable runnable, long delay) {
+        return Bukkit.getScheduler().runTaskLaterAsynchronously(main, runnable, delay);
     }
 }
