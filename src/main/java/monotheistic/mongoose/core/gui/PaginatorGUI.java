@@ -84,11 +84,11 @@ public class PaginatorGUI {
     }
 
     private static ItemStack pageIdentifier(int page) {
-        return new ItemBuilder(Material.PAPER).name(ChatColor.GOLD + "Page: " + page).addItemFlags(ItemFlag.HIDE_ATTRIBUTES).build();
+        return new ItemBuilder(Material.PAPER).name(ChatColor.GOLD + "Page: " + page + 1).addItemFlags(ItemFlag.HIDE_ATTRIBUTES).build();
     }
 
     private static String titleForPage(String title, int page) {
-        return title + ": " + page;
+        return title + ": " + page + 1;
     }
 
     public void open(Player player) {
