@@ -21,9 +21,9 @@ public abstract class SubCommand extends Component {
         this.desription = desription;
         this.name = name;
         this.aliases = aliases;
-        requiredPermissions = PluginStrings.mainCmdLabel(false) + ".commands." + name();
+        requiredPermissions = PluginStrings.mainCmdLabel(false) + ".commands." + name() + ".use";
         this.usage = PluginStrings.mainCmdLabel(true) + " " + usage;
-        invalidSyntax = PluginStrings.invalidSyntax() + usage() + ".use";
+        invalidSyntax = PluginStrings.invalidSyntax() + usage();
         this.id = id;
     }
 
