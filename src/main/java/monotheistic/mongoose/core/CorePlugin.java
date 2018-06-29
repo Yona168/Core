@@ -13,13 +13,13 @@ public abstract class CorePlugin extends ComponentPlugin {
     public CorePlugin() {
         setup();
         onDisable(PluginStrings::nullifyEverything);
-        onEnable(() -> ScheduleUtils.set(this));
         onDisable(() -> ScheduleUtils.set(null));
         addChild(new GUIListener());
     }
 
     public void setup() {
         PluginStrings.setup(this, ChatColor.RED, ChatColor.AQUA, "Undefined", "None");
+        ScheduleUtils.set(this);
     }
 
     public Database setupDb(Database database) {
