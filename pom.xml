@@ -8,6 +8,10 @@
     <artifactId>core</artifactId>
     <version>.01-BETA</version>
 
+    <properties>
+        <kotlin.version>1.2.61</kotlin.version>
+    </properties>
+
     <build>
         <plugins>
             <plugin>
@@ -17,7 +21,6 @@
                     <source>1.8</source>
                     <target>1.8</target>
                 </configuration>
-                <version>3.7.0</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -76,6 +79,7 @@
             <version>4.0.2</version>
             <scope>provided</scope>
         </dependency>
+
 
     </dependencies>
 

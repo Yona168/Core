@@ -19,25 +19,17 @@ import java.util.function.Consumer;
 
 public class MyGUI implements InventoryHolder {
     private Inventory inventory;
-    final Map<ItemStack, Consumer<InventoryClickEvent>> listeners;
-    final Set<Consumer<InventoryClickEvent>> allTimeListeners;
-
-    public MyGUI(String name, int size, Map<ItemStack, Consumer<InventoryClickEvent>> listeners, Set<Consumer<InventoryClickEvent>> allTimeListeners) {
-        this.listeners = listeners == null ? new HashMap<>() : listeners;
-        this.allTimeListeners = allTimeListeners == null ? new HashSet<>() : allTimeListeners;
-        inventory = Bukkit.createInventory(this, size, name);
-        if (listeners != null)
-            inventory.setContents(listeners.keySet().toArray(new ItemStack[size]));
-
-    }
+    final Map<Integer, Consumer<InventoryClickEvent>> listeners = new HashMap<>();
+    final Set<Consumer<InventoryClickEvent>> allTimeListeners = new HashSet<>();
+    private MyGUI parent;
 
     public MyGUI(String name, int size) {
-        this(name, size, null, null);
+        inventory = Bukkit.createInventory(this, size, name);
     }
 
     public MyGUI set(int slot, ItemStack item, Consumer<InventoryClickEvent> eventConsumer) {
         inventory.setItem(slot, item);
-        getListeners().put(item, eventConsumer);
+        getListeners().put(slot, eventConsumer);
         return this;
     }
 
@@ -56,7 +48,7 @@ public class MyGUI implements InventoryHolder {
         return this;
     }
 
-    private Map<ItemStack, Consumer<InventoryClickEvent>> getListeners() {
+    private Map<Integer, Consumer<InventoryClickEvent>> getListeners() {
         return listeners;
     }
 
@@ -66,6 +58,14 @@ public class MyGUI implements InventoryHolder {
 
     public void open(final Player player) {
         player.openInventory(getView(player));
+    }
+
+    public void openParent(final Player player) {
+        parent.open(player);
+    }
+
+    public void child(MyGUI child) {
+        child.parent = this;
     }
 
     private InventoryView getView(final Player player) {
@@ -100,7 +100,7 @@ public class MyGUI implements InventoryHolder {
 
 
     //Decoration Things
-    public enum PatternType {
+    public enum Preset {
         BORDER((item, inv) -> {
             //TOP
             for (int i = 0; i < 9; i++) {
@@ -123,14 +123,14 @@ public class MyGUI implements InventoryHolder {
 
         private final BiConsumer<ItemStack, Inventory> putAction;
 
-        PatternType(BiConsumer<ItemStack, Inventory> action) {
+        Preset(BiConsumer<ItemStack, Inventory> action) {
             this.putAction = action;
         }
 
     }
 
-    public MyGUI withPattern(ItemStack item, PatternType patternType) {
-        patternType.putAction.accept(item, this.inventory);
+    public MyGUI withPattern(ItemStack item, Preset preset) {
+        preset.putAction.accept(item, this.inventory);
         return this;
     }
 }

@@ -47,7 +47,7 @@ this.myVal=val;
 }
 
 public int getMyVal(){
-return myVal
+return myVal;
 }
 
 }
@@ -144,7 +144,7 @@ public class MyDatabase extends Database {
 
     @Override
     public PlayerData write(Player player, PlayerData data) {
-//write a player into the Database with the corresponding PlayerData
+DatabaseComponent
     }
 
     @Override

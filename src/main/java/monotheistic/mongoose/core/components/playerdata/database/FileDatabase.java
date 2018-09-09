@@ -3,58 +3,35 @@ package monotheistic.mongoose.core.components.playerdata.database;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.UnsafeInput;
 import com.esotericsoftware.kryo.io.UnsafeOutput;
-import monotheistic.mongoose.core.components.playerdata.PlayerData;
-import monotheistic.mongoose.core.utils.FileUtils;
-import org.bukkit.entity.Player;
-import org.bukkit.plugin.java.JavaPlugin;
-import org.objenesis.strategy.StdInstantiatorStrategy;
 
-import java.io.*;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Map;
 import java.util.Optional;
-import java.util.UUID;
-import java.util.function.Supplier;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
-public class FileDatabase extends Database {
+public class FileDatabase<K, V> extends DatabaseComponent<K, V> {
+    private final Path parentFolder;
     private final Kryo kryo;
-    private final Path playerFolder;
+    private final Function<K, String> pathIdentifierFunc;
 
-    public FileDatabase(JavaPlugin main, Supplier<PlayerData> function) {
-        super(main, function);
+    public FileDatabase(Path parentFolder, Function<K, V> supplier, Map<K, V> cache, Function<K, String> getPathIdentifier, Consumer<Kryo> registerKryoConsumer) {
+        this(parentFolder, supplier, cache, getPathIdentifier);
+        registerKryoConsumer.accept(kryo);
+    }
+
+    public FileDatabase(Path parentFolder, Function<K, V> supplier, Map<K, V> cache, Function<K, String> getPathIdentifier) {
+        super(supplier, cache);
+        this.parentFolder = parentFolder;
+        this.pathIdentifierFunc = getPathIdentifier;
         kryo = new Kryo();
-        kryo.setInstantiatorStrategy(new Kryo.DefaultInstantiatorStrategy(new StdInstantiatorStrategy()));
-        BukkitSerializers.registerSerializer(kryo);
-        this.playerFolder = Paths.get(main.getDataFolder().toPath() + File.separator + "players");
-        if (!Files.exists(playerFolder))
-            FileUtils.createDirectory(playerFolder);
-
     }
-
-
-    @Override
-    public Optional<PlayerData> fromStorage(Player player) {
-        return FileUtils.list(playerFolder).filter(file -> file.getFileName().toString().equals(player.getUniqueId().toString() + ".dat"))
-                .findAny().map(file -> (thaw(kryo, file)));
-    }
-
-    @Override
-    public PlayerData write(Player player, PlayerData data) {
-        try {
-            freeze(kryo, Paths.get(playerFolder + File.separator + player.getUniqueId().toString() + ".dat"), data);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return data;
-
-    }
-
-    @Override
-    public boolean isRegistered(UUID uuid) {
-        return fromStorage(uuid).isPresent();
-    }
-
 
     private void freeze(Kryo kryo, Path file, Object value) throws IOException {
         if (!Files.exists(file.getParent()))
@@ -78,5 +55,20 @@ public class FileDatabase extends Database {
                 e.printStackTrace();
             }
         return defaultValue;
+    }
+
+
+    @Override
+    public Optional<V> fromDatabase(K key) {
+        return Optional.ofNullable(thaw(kryo, Paths.get(parentFolder.toString(), pathIdentifierFunc.apply(key))));
+    }
+
+    @Override
+    public void updateDatabaseFor(K key, V newEntry) {
+        try {
+            freeze(kryo, Paths.get(parentFolder.toString(), pathIdentifierFunc.apply(key)), newEntry);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
