@@ -8,16 +8,13 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.util.Arrays;
 import java.util.Collection;
 
-public class CommandManager extends AbstractCommandManager {
+public class CommandManager extends AbstractCommandManagerComponent {
 
     public CommandManager(final JavaPlugin plugin, final Collection<SubCommand> commands) {
-        super(plugin, commands);
+        super(commands);
 
     }
 
-    public CommandManager(final JavaPlugin plugin) {
-        super(plugin);
-    }
 
     @Override
     public boolean onCommand(final CommandSender commandSender, final Command command, final String s, final String[] strings) {

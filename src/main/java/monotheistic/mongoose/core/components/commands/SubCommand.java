@@ -1,14 +1,12 @@
 package monotheistic.mongoose.core.components.commands;
 
-import com.gitlab.avelyn.architecture.base.Component;
 import monotheistic.mongoose.core.strings.PluginStrings;
-import org.bukkit.command.CommandSender;
 
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.Optional;
 
-public abstract class SubCommand extends Component {
+public abstract class SubCommand extends AbstractCommandManagerComponent {
     private final String name;
     private final String desription;
     private final String[] aliases;
@@ -33,7 +31,6 @@ public abstract class SubCommand extends Component {
         this(name, desription, usage, null, id);
     }
 
-    protected abstract boolean onCommand(CommandSender sender, String[] args);
 
     public String name() {
         return name;
