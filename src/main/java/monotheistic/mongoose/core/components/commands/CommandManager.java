@@ -25,7 +25,7 @@ public class CommandManager extends AbstractCommandManagerComponent {
         for (SubCommand subCommand : super.getCommands()) {
             if (subCommand.name().equalsIgnoreCase(strings[0]) || (subCommand.aliases().isPresent() && contains(subCommand.aliases().get(), strings[0]))) {
                 if (commandSender.hasPermission(subCommand.requiredPermissions(true)) || commandSender.isOp()) {
-                    return subCommand.onCommand(commandSender, Arrays.copyOfRange(strings, 1, strings.length));
+                    return subCommand.onCommand(commandSender, command, s, Arrays.copyOfRange(strings, 1, strings.length));
                 } else {
                     commandSender.sendMessage(PluginStrings.noPerms());
                     return false;
