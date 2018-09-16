@@ -28,12 +28,12 @@ public class CommandManager extends Component implements CommandExecutor {
 
     public CommandPart newCommandRoot(String name, String description, String usage, int argsToUse, Executable<CommandSender, String, String[]> executor) {
 
-        return new CommandPart(name, description, usage, argsToUse, name) {
+        return addChild(new CommandPart(name, description, usage, argsToUse, name) {
             @Override
             boolean initExecute(CommandSender sender, String cmd, String[] args, List<Object> objs) {
 
                 return executor.execute(sender, cmd, args, objs);
             }
-        };
+        });
     }
 }
