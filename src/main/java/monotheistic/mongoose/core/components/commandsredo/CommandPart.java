@@ -11,25 +11,25 @@ public abstract class CommandPart extends Component implements Executable<Comman
     private final String description, usage;
     final String name, trigger;
     private final int argsToInitiallyUse;
-    final List<Object> objs;
 
-    CommandPart(String name, String description, String usage, int argsToInitiallyUse, String trigger, List<Object> objs) {
+
+    CommandPart(String name, String description, String usage, int argsToInitiallyUse, String trigger) {
         this.name = name;
         this.description = description;
         this.usage = usage;
         this.argsToInitiallyUse = argsToInitiallyUse;
         this.trigger = trigger;
-        this.objs = objs;
+
     }
 
     @Override
     public final boolean execute(CommandSender sender, String cmd, String[] args, List<Object> objs) {
-        boolean result = initExecute(sender, cmd, args);
+        boolean result = initExecute(sender, cmd, args, objs);
         return executeChildIfPossibleWith(sender, args, objs).orElse(result);
 
     }
 
-    abstract boolean initExecute(CommandSender sender, String cmd, String[] args);
+    abstract boolean initExecute(CommandSender sender, String cmd, String[] args, List<Object> objs);
 
     private Optional<Boolean> executeChildIfPossibleWith(CommandSender sender, String[] args, List<Object> objs) {
         if (args.length <= this.argsToInitiallyUse)
@@ -44,13 +44,22 @@ public abstract class CommandPart extends Component implements Executable<Comman
                 });
     }
 
-    public CommandPart addChild(String trigger, int argsToInitiallyUse, Executable<CommandSender, String, String[]> initExecute) {
-        return new CommandPart(this.name, this.description, this.usage, argsToInitiallyUse, trigger, objs) {
+    public CommandPart addChild(String trigger, String description, String usage, int argsToInitiallyUse, Executable<CommandSender, String, String[]> initExecute) {
+        return addChild(new CommandPart(this.name, description, usage, argsToInitiallyUse, trigger) {
             @Override
-            boolean initExecute(CommandSender sender, String cmd, String[] args) {
+            boolean initExecute(CommandSender sender, String cmd, String[] args, List<Object> objs) {
                 return initExecute.execute(sender, cmd, args, objs);
             }
-        };
+        });
     }
+
+    public CommandPart addChild(String trigger, String description, int argsToInitiallyUse, Executable<CommandSender, String, String[]> exec) {
+        return addChild(trigger, description, this.usage, argsToInitiallyUse, exec);
+    }
+
+    public CommandPart addChild(String trigger, int argsToInitiallyUse, String usage, Executable<CommandSender, String, String[]> exec) {
+        return addChild(trigger, this.description, usage, argsToInitiallyUse, exec);
+    }
+
 
 }

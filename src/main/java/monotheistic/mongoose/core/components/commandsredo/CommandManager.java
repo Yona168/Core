@@ -23,14 +23,15 @@ public class CommandManager extends Component implements CommandExecutor {
             if (!(it instanceof CommandPart))
                 return false;
             return ((CommandPart) it).trigger.equalsIgnoreCase(strings[0]);
-        }).findFirst().map(it -> ((CommandPart) it).execute(commandSender, strings[0], strings, ((CommandPart) it).objs)).orElse(defaultExec.execute(commandSender, strings[0], strings, new ArrayList<>()));
+        }).findFirst().map(it -> ((CommandPart) it).execute(commandSender, strings[0], strings, new ArrayList())).orElse(defaultExec.execute(commandSender, strings[0], strings, new ArrayList<>()));
     }
 
     public CommandPart newCommandRoot(String name, String description, String usage, int argsToUse, Executable<CommandSender, String, String[]> executor) {
-        final List<Object> objs = new ArrayList<>();
-        return new CommandPart(name, description, usage, argsToUse, name, objs) {
+
+        return new CommandPart(name, description, usage, argsToUse, name) {
             @Override
-            boolean initExecute(CommandSender sender, String cmd, String[] args) {
+            boolean initExecute(CommandSender sender, String cmd, String[] args, List<Object> objs) {
+
                 return executor.execute(sender, cmd, args, objs);
             }
         };
