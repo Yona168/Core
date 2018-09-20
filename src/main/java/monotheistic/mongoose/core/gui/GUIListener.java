@@ -8,7 +8,6 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemFlag;
-import org.bukkit.inventory.ItemStack;
 
 import java.util.function.Consumer;
 
@@ -20,16 +19,16 @@ public class GUIListener extends Component {
             final Inventory clicked = event.getClickedInventory();
             if (clicked == null)
                 return;
-            final InventoryHolder holder = event.getView().getTopInventory().getHolder();
+            final Inventory topInventory = event.getView().getTopInventory();
+            if (topInventory == null)
+                return;
+            final InventoryHolder holder = topInventory.getHolder();
             if (holder instanceof MyGUI) {
                 event.setCancelled(true);
                 if (clicked.getHolder() != null && clicked.getHolder() == holder) {
                     final MyGUI gui = (MyGUI) holder;
-                    final ItemStack currentItem = event.getCurrentItem();
-                    if (currentItem == null)
-                        return;
                     gui.allTimeListeners.forEach(listener -> listener.accept(event));
-                    final Consumer<InventoryClickEvent> action = gui.listeners.get(currentItem);
+                    final Consumer<InventoryClickEvent> action = gui.listeners.get(event.getSlot());
                     if (action != null) {
                         action.accept(event);
                     }
