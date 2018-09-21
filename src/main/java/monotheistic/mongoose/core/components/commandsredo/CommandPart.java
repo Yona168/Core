@@ -7,7 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-public abstract class CommandPart extends Component implements Executable<CommandSender, String, String[]> {
+public abstract class CommandPart extends Component implements Executable<CommandSender, String, String[]>, HasCommandInfo {
     private final CommandInfo info;
 
 
@@ -37,7 +37,7 @@ public abstract class CommandPart extends Component implements Executable<Comman
                 });
     }
 
-    CommandInfo getInfo() {
+    public CommandInfo getInfo() {
         return info;
     }
 
