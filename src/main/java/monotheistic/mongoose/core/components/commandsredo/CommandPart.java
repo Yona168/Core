@@ -21,7 +21,7 @@ public abstract class CommandPart extends Component implements Executable<Comman
             if (args.length <= this.info.getArgsToInitiallyUtilize())
                 return true;
             else
-                return executeChildIfPossibleWith(sender, Arrays.copyOfRange(args, this.info.getArgsToInitiallyUtilize() + 1, args.length), objs).orElse(false);
+                return executeChildIfPossibleWith(sender, Arrays.copyOfRange(args, this.info.getArgsToInitiallyUtilize(), args.length), objs).orElse(false);
         });
     }
 
