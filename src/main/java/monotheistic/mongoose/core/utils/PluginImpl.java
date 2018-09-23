@@ -29,7 +29,7 @@ public class PluginImpl implements Plugin {
 
     @Override
     public PluginDescriptionFile getDescription() {
-        return null;
+        return new PluginDescriptionFile("Plugin Implementation", "1.0", "monotheistic.mongoose.core.CorePlugin");
     }
 
     @Override
