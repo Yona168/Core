@@ -18,10 +18,10 @@ public class Configuration {
     private final FileConfiguration config;
     private Path file;
 
-    public Configuration(Path folder, String fileName) throws IOException {
+    public Configuration(Path folder, String fileName, Class<?> classOfCaller) throws IOException {
         this.file = Paths.get(folder.toString(), fileName);
         if (!Files.exists(this.file)) {
-            final InputStream nioFromFileAccess = this.getClass().getClassLoader().getResourceAsStream(fileName);
+            final InputStream nioFromFileAccess = classOfCaller.getClassLoader().getResourceAsStream(fileName);
             final ByteBuffer buf = ByteBuffer.allocate(100);
             ReadableByteChannel nioFromFile = Channels.newChannel(nioFromFileAccess);
             Files.createFile(file);
