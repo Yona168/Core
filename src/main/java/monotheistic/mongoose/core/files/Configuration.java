@@ -2,9 +2,13 @@ package monotheistic.mongoose.core.files;
 
 import monotheistic.mongoose.core.utils.FileUtils;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.RandomAccessFile;
+import java.nio.ByteBuffer;
+import java.nio.channels.Channels;
+import java.nio.channels.ReadableByteChannel;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -14,10 +18,26 @@ public class Configuration {
     private final FileConfiguration config;
     private Path file;
 
-    public Configuration(JavaPlugin plugin, String file) {
-        this.file = Paths.get(plugin.getDataFolder() + File.separator + file);
-        if (!Files.exists(this.file))
-            plugin.saveResource(file, false);
+    public Configuration(Path folder, String fileName) throws IOException {
+        this.file = Paths.get(folder.toString(), fileName);
+        if (!Files.exists(this.file)) {
+            final InputStream nioFromFileAccess = this.getClass().getClassLoader().getResourceAsStream(fileName);
+            final ByteBuffer buf = ByteBuffer.allocate(100);
+            ReadableByteChannel nioFromFile = Channels.newChannel(nioFromFileAccess);
+            Files.createFile(file);
+            RandomAccessFile nioToFile = new RandomAccessFile(file.toFile(), "rw");
+            int read = nioFromFile.read(buf);
+            while (read != 0) {
+                buf.flip();
+                nioToFile.write(buf.array());
+                buf.clear();
+                read = nioFromFile.read(buf);
+            }
+            nioFromFileAccess.close();
+            nioFromFile.close();
+            nioToFile.close();
+        }
+
 
         this.config = FileUtils.loadConfig(this.file.toFile());
     }
