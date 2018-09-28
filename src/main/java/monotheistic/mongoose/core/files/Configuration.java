@@ -16,15 +16,15 @@ import java.util.Objects;
 
 public class Configuration {
     private final FileConfiguration config;
-    private Path file;
+    private final Path file;
 
     public Configuration(Path folder, String fileName, Class<?> classOfCaller) throws IOException {
-        this.file = Paths.get(folder.toString(), fileName);
-        if (!Files.exists(this.file)) {
+        Path path = Paths.get(folder.toString(), fileName);
+        if (!Files.exists(path)) {
+            this.file = Files.createFile(path);
             final InputStream nioFromFileAccess = classOfCaller.getClassLoader().getResourceAsStream(fileName);
             final ByteBuffer buf = ByteBuffer.allocate(100);
             ReadableByteChannel nioFromFile = Channels.newChannel(nioFromFileAccess);
-            Files.createFile(file);
             RandomAccessFile nioToFile = new RandomAccessFile(file.toFile(), "rw");
             int read = nioFromFile.read(buf);
             while (read != 0) {
@@ -36,9 +36,7 @@ public class Configuration {
             nioFromFileAccess.close();
             nioFromFile.close();
             nioToFile.close();
-        }
-
-
+        } else file = path;
         this.config = FileUtils.loadConfig(this.file.toFile());
     }
 
