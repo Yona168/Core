@@ -13,23 +13,29 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Objects;
+import java.util.Optional;
+
+import static java.util.Optional.empty;
+import static java.util.Optional.of;
 
 public class Configuration {
     private final FileConfiguration config;
     private final Path file;
 
-    public Configuration(Path folder, String fileName, Class<?> classOfCaller) throws IOException {
-        Path path = Paths.get(folder.toString(), fileName);
+    public Configuration(Path folder, String fileName, ClassLoader classLoader) throws IOException {
+        Path path = Paths.get(folder.toAbsolutePath().toString(), fileName);
         if (!Files.exists(path)) {
-            this.file = Files.createFile(path);
-            final InputStream nioFromFileAccess = classOfCaller.getClassLoader().getResourceAsStream(fileName);
+            this.file = createFileWithParents(path).orElseThrow(IOException::new);
+            final InputStream nioFromFileAccess = classLoader.getResourceAsStream(fileName);
             final ByteBuffer buf = ByteBuffer.allocate(100);
             ReadableByteChannel nioFromFile = Channels.newChannel(nioFromFileAccess);
             RandomAccessFile nioToFile = new RandomAccessFile(file.toFile(), "rw");
             int read = nioFromFile.read(buf);
-            while (read != 0) {
+            while (read != -1) {
                 buf.flip();
-                nioToFile.write(buf.array());
+                while (buf.hasRemaining()) {
+                    nioToFile.write(buf.get());
+                }
                 buf.clear();
                 read = nioFromFile.read(buf);
             }
@@ -38,6 +44,22 @@ public class Configuration {
             nioToFile.close();
         } else file = path;
         this.config = FileUtils.loadConfig(this.file.toFile());
+    }
+
+    private static Optional<Path> createFileWithParents(Path file) {
+        if (Files.exists(file))
+            return of(file);
+        Path parent = file.getParent();
+        try {
+            if (parent != null && !Files.exists(parent)) {
+                Files.createDirectories(parent);
+            }
+            Files.createFile(file);
+            return of(file);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return empty();
+        }
     }
 
     public Configuration save() {
