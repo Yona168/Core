@@ -10,10 +10,7 @@ import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
@@ -43,9 +40,18 @@ public class MyGUI implements InventoryHolder {
         return this;
     }
 
+    public MyGUI addItems(Collection<ItemStack> items) {
+        items.forEach(inventory::addItem);
+        return this;
+    }
+
     public MyGUI addAllTimeListener(Consumer<InventoryClickEvent> inventoryClickEventConsumer) {
         getAllTimeListeners().add(inventoryClickEventConsumer);
         return this;
+    }
+
+    public boolean hasListenerSetFor(int slot) {
+        return getListeners().containsKey(slot);
     }
 
     private Map<Integer, Consumer<InventoryClickEvent>> getListeners() {
