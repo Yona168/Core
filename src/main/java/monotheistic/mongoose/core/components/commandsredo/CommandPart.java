@@ -2,6 +2,7 @@ package monotheistic.mongoose.core.components.commandsredo;
 
 import com.gitlab.avelyn.architecture.base.Component;
 import org.bukkit.command.CommandSender;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.List;
@@ -25,6 +26,7 @@ public abstract class CommandPart extends Component implements Executable<Comman
         });
     }
 
+    @NotNull
     protected abstract Optional<Boolean> initExecute(CommandSender sender, String cmd, String[] args, List<Object> objs);
 
     private Optional<Boolean> executeChildIfPossibleWith(CommandSender sender, String[] args, List<Object> objs) {
