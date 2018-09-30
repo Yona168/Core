@@ -19,6 +19,7 @@ public abstract class CommandPart extends Component implements Executable, HasCo
 
     @Override
     public final boolean execute(CommandSender sender, String cmd, String[] args, PluginInfo pluginInfo, List<Object> objs) {
+
         return initExecute(sender, cmd, args, pluginInfo, objs).orElseGet(() -> {
             if (args.length <= this.info.getArgsToInitiallyUtilize())
                 return true;

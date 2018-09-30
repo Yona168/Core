@@ -22,13 +22,18 @@ public final class CommandManager extends Component implements CommandExecutor, 
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
         if (strings.length < 1)
             return false;
-        return getChildren().stream().filter(it -> {
-            if (!(it instanceof CommandRoot))
+        return getChildren().stream().filter(it ->
+                it instanceof CommandRoot
+        ).map(it -> (CommandRoot) it).filter(part ->
+                part.getName().equalsIgnoreCase(strings[0])
+        ).findFirst().filter(root -> {
+            if (root.canBeExecutedBy(this.getPluginName(), commandSender)) {
+                commandSender.sendMessage(CommandPart.noPerms(pluginInfo));
                 return false;
-            final CommandRoot part = (CommandRoot) it;
-            return part.getName().equalsIgnoreCase(strings[0]) && part.canBeExecutedBy(getPluginName(), commandSender);
-        }).findFirst()
-                .map(it -> ((CommandRoot) it).execute(commandSender, strings[0], Arrays.copyOfRange(strings, 1, strings.length), pluginInfo, new ArrayList<Object>()))
+            }
+            return true;
+        })
+                .map(it -> it.execute(commandSender, strings[0], Arrays.copyOfRange(strings, 1, strings.length), pluginInfo, new ArrayList<Object>()))
                 .orElseGet(() -> defaultExec.execute(commandSender, strings[0], Arrays.copyOfRange(strings, 1, strings.length), pluginInfo, new ArrayList<>()));
     }
 
