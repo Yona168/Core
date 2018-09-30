@@ -9,11 +9,11 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public final class CommandManager extends Component implements CommandExecutor, HasPluginInfo {
+public final class CommandSelector extends Component implements CommandExecutor, HasPluginInfo {
     private final Executable defaultExec;
     private final PluginInfo pluginInfo;
 
-    public CommandManager(Executable defaultExec, PluginInfo pluginInfo) {
+    public CommandSelector(Executable defaultExec, PluginInfo pluginInfo) {
         this.defaultExec = defaultExec;
         this.pluginInfo = pluginInfo;
     }
