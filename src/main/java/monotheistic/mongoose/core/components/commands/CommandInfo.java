@@ -5,19 +5,14 @@ import java.util.Objects;
 public class CommandInfo {
     private final String description, usage, name;
     private final int argsToInitiallyUtilize;
-    private final boolean needsPermission;
 
-    public CommandInfo(String description, String usage, String name, int argsToInitiallyUtilize, boolean needsPermission) {
+    public CommandInfo(String description, String usage, String name, int argsToInitiallyUtilize) {
         this.description = description;
         this.usage = usage;
         this.name = name;
         this.argsToInitiallyUtilize = argsToInitiallyUtilize;
-        this.needsPermission = needsPermission;
     }
 
-    boolean isNeedsPermission() {
-        return needsPermission;
-    }
 
     String getDescription() {
         return description;
