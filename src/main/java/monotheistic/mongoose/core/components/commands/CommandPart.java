@@ -1,6 +1,7 @@
 package monotheistic.mongoose.core.components.commands;
 
 import com.gitlab.avelyn.architecture.base.Component;
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 
@@ -44,4 +45,19 @@ public abstract class CommandPart extends Component implements Executable, HasCo
     public CommandInfo getInfo() {
         return this.info;
     }
+
+    protected static String pluginTag(PluginInfo info) {
+        final ChatColor second = info.getSecondaryColor();
+        final ChatColor main = info.getMainColor();
+        return second + "[" + main + info.getName() + second + "]";
+    }
+
+    protected static String incorrectUsageMessage(PluginInfo info, String usage) {
+        return pluginTag(info) + ChatColor.RED + " Incorrect usage! Correct usage is: " + "/" + info.getTag() + " " + usage;
+    }
+
+    protected static String noPerms(PluginInfo info) {
+        return pluginTag(info) + ChatColor.RED + " You do not have the correct permission(s) to use this command!";
+    }
+
 }
