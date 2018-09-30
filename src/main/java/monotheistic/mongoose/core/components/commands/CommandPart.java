@@ -1,4 +1,4 @@
-package monotheistic.mongoose.core.components.commandsredo;
+package monotheistic.mongoose.core.components.commands;
 
 import com.gitlab.avelyn.architecture.base.Component;
 import org.bukkit.command.CommandSender;
@@ -30,17 +30,14 @@ public abstract class CommandPart extends Component implements Executable<Comman
     protected abstract Optional<Boolean> initExecute(CommandSender sender, String cmd, String[] args, List<Object> objs);
 
     private Optional<Boolean> executeChildIfPossibleWith(CommandSender sender, String[] args, List<Object> objs) {
+
         return getChildren().stream().filter(it -> it instanceof CommandPart).map(it -> (CommandPart) it)
-                .filter(it -> it.getInfo().getTrigger().equalsIgnoreCase(args[0])).findFirst()
+                .filter(it -> it.getInfo().getName().equalsIgnoreCase(args[0])).findFirst()
                 .map(cmd -> {
                     if (args.length - 1 < cmd.getInfo().getArgsToInitiallyUtilize())
                         return false;
                     return cmd.execute(sender, args[0], Arrays.copyOfRange(args, 1, args.length), objs);
                 });
-    }
-
-    public CommandInfo getInfo() {
-        return info;
     }
 
 

@@ -1,17 +1,22 @@
-package monotheistic.mongoose.core.components.commandsredo;
+package monotheistic.mongoose.core.components.commands;
 
 import java.util.Objects;
 
 public class CommandInfo {
-    private final String description, usage, name, trigger;
+    private final String description, usage, name;
     private final int argsToInitiallyUtilize;
+    private final boolean needsPermission;
 
-    public CommandInfo(String description, String usage, String name, String trigger, int argsToInitiallyUtilize) {
+    public CommandInfo(String description, String usage, String name, int argsToInitiallyUtilize, boolean needsPermission) {
         this.description = description;
         this.usage = usage;
         this.name = name;
-        this.trigger = trigger;
         this.argsToInitiallyUtilize = argsToInitiallyUtilize;
+        this.needsPermission = needsPermission;
+    }
+
+    public boolean isNeedsPermission() {
+        return needsPermission;
     }
 
     public String getDescription() {
@@ -26,10 +31,6 @@ public class CommandInfo {
         return name;
     }
 
-    public String getTrigger() {
-        return trigger;
-    }
-
     public int getArgsToInitiallyUtilize() {
         return argsToInitiallyUtilize;
     }
@@ -42,12 +43,11 @@ public class CommandInfo {
         return getArgsToInitiallyUtilize() == that.getArgsToInitiallyUtilize() &&
                 Objects.equals(getDescription(), that.getDescription()) &&
                 Objects.equals(getUsage(), that.getUsage()) &&
-                Objects.equals(getName(), that.getName()) &&
-                Objects.equals(getTrigger(), that.getTrigger());
+                Objects.equals(getName(), that.getName());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getDescription(), getUsage(), getName(), getTrigger(), getArgsToInitiallyUtilize());
+        return Objects.hash(getDescription(), getUsage(), getName(), getArgsToInitiallyUtilize());
     }
 }
