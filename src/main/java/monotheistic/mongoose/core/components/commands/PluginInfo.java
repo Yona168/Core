@@ -14,19 +14,19 @@ public class PluginInfo {
         this.secondaryColor = secondaryColor;
     }
 
-    String getName() {
+    public String getName() {
         return name;
     }
 
-    String getTag() {
+    public String getTag() {
         return tag;
     }
 
-    ChatColor getMainColor() {
+    public ChatColor getMainColor() {
         return mainColor;
     }
 
-    ChatColor getSecondaryColor() {
+    public ChatColor getSecondaryColor() {
         return secondaryColor;
     }
 }

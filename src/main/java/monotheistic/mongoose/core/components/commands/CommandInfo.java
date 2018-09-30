@@ -15,7 +15,7 @@ public class CommandInfo {
         this.needsPermission = needsPermission;
     }
 
-    public boolean isNeedsPermission() {
+    boolean isNeedsPermission() {
         return needsPermission;
     }
 
