@@ -8,12 +8,13 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.function.BiPredicate;
 
 public final class CommandSelector extends Component implements CommandExecutor, HasPluginInfo {
-    private final Executable defaultExec;
+    private final BiPredicate<CommandSender, String> defaultExec;
     private final PluginInfo pluginInfo;
 
-    public CommandSelector(Executable defaultExec, PluginInfo pluginInfo) {
+    public CommandSelector(BiPredicate<CommandSender, String> defaultExec, PluginInfo pluginInfo) {
         this.defaultExec = defaultExec;
         this.pluginInfo = pluginInfo;
     }
@@ -34,7 +35,7 @@ public final class CommandSelector extends Component implements CommandExecutor,
             return true;
         })
                 .map(it -> it.execute(commandSender, strings[0], Arrays.copyOfRange(strings, 1, strings.length), pluginInfo, new ArrayList<Object>()))
-                .orElseGet(() -> defaultExec.execute(commandSender, strings[0], Arrays.copyOfRange(strings, 1, strings.length), pluginInfo, new ArrayList<>()));
+                .orElseGet(() -> defaultExec.test(commandSender, strings[0]));
     }
 
     @Override
