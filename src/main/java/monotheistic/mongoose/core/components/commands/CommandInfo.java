@@ -19,19 +19,19 @@ public class CommandInfo {
         return needsPermission;
     }
 
-    public String getDescription() {
+    String getDescription() {
         return description;
     }
 
-    public String getUsage() {
+    String getUsage() {
         return usage;
     }
 
-    public String getName() {
+    String getName() {
         return name;
     }
 
-    public int getArgsToInitiallyUtilize() {
+    int getArgsToInitiallyUtilize() {
         return argsToInitiallyUtilize;
     }
 
