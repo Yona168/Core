@@ -40,5 +40,8 @@ public abstract class CommandPart extends Component implements Executable, HasCo
                 });
     }
 
-
+    @Override
+    public CommandInfo getInfo() {
+        return this.info;
+    }
 }
