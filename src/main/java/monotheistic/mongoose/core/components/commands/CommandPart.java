@@ -18,7 +18,7 @@ public abstract class CommandPart extends Component implements Executable, HasCo
 
     @Override
     public final boolean execute(CommandSender sender, String cmd, String[] args, PluginInfo pluginInfo, List<Object> objs) {
-        return initExecute(sender, cmd, args, objs).orElseGet(() -> {
+        return initExecute(sender, cmd, args, pluginInfo, objs).orElseGet(() -> {
             if (args.length <= this.info.getArgsToInitiallyUtilize())
                 return true;
             else
@@ -27,7 +27,7 @@ public abstract class CommandPart extends Component implements Executable, HasCo
     }
 
     @NotNull
-    protected abstract Optional<Boolean> initExecute(CommandSender sender, String cmd, String[] args, List<Object> objs);
+    protected abstract Optional<Boolean> initExecute(CommandSender sender, String cmd, String[] args, PluginInfo info, List<Object> objs);
 
     private Optional<Boolean> executeChildIfPossibleWith(CommandSender sender, String[] args, PluginInfo pluginInfo, List<Object> objs) {
 
