@@ -29,4 +29,9 @@ public class PluginInfo {
     public ChatColor getSecondaryColor() {
         return secondaryColor;
     }
+
+    String getPluginNameForPermission() {
+        return getName().toLowerCase();
+    }
+
 }

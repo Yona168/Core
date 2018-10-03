@@ -22,4 +22,8 @@ public interface HasPluginInfo {
     default ChatColor getSecondaryColor() {
         return getPluginInfo().getSecondaryColor();
     }
+
+    default String getPluginNameForPermission() {
+        return getPluginInfo().getPluginNameForPermission();
+    }
 }

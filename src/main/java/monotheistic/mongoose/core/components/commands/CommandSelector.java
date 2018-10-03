@@ -28,7 +28,7 @@ public final class CommandSelector extends Component implements CommandExecutor,
         ).map(it -> (CommandRoot) it).filter(part ->
                 part.getName().equalsIgnoreCase(strings[0])
         ).findFirst().filter(root -> {
-            if (root.canBeExecutedBy(this.getPluginName(), commandSender)) {
+            if (root.canBeExecutedBy(this.getPluginNameForPermission(), commandSender)) {
                 commandSender.sendMessage(CommandPart.noPerms(pluginInfo));
                 return false;
             }
