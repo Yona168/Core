@@ -1,6 +1,7 @@
 package monotheistic.mongoose.core.components.commands;
 
 import com.gitlab.avelyn.architecture.base.Component;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -21,8 +22,10 @@ public final class CommandSelector extends Component implements CommandExecutor,
 
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
-        if (strings.length < 1)
+        if (strings.length < 1) {
+            commandSender.sendMessage(getPluginTag() + ChatColor.RED + s + " is not a valid command");
             return false;
+        }
         return getChildren().stream().filter(it ->
                 it instanceof CommandRoot
         ).map(it -> (CommandRoot) it).filter(part ->
