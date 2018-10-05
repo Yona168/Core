@@ -11,6 +11,10 @@ public interface HasPluginInfo {
         return getPluginInfo().getName();
     }
 
+    default String getDisplayName() {
+        return getPluginInfo().getDisplayName();
+    }
+
     default String getPluginTag() {
         return getPluginInfo().getTag();
     }

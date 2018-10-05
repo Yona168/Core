@@ -5,12 +5,14 @@ import java.util.Objects;
 public class CommandInfo {
     private final String description, usage, name;
     private final int argsToInitiallyUtilize;
+    private final boolean sendUsageMessageIfNoChildFound;
 
-    public CommandInfo(String description, String usage, String name, int argsToInitiallyUtilize) {
+    public CommandInfo(String description, String usage, String name, int argsToInitiallyUtilize, boolean sendUsageMessageIfNoChildFound) {
         this.description = description;
         this.usage = usage;
         this.name = name;
         this.argsToInitiallyUtilize = argsToInitiallyUtilize;
+        this.sendUsageMessageIfNoChildFound = sendUsageMessageIfNoChildFound;
     }
 
 
@@ -26,6 +28,9 @@ public class CommandInfo {
         return name;
     }
 
+    boolean isSendUsageMessageIfNoChildFound() {
+        return sendUsageMessageIfNoChildFound;
+    }
     int getArgsToInitiallyUtilize() {
         return argsToInitiallyUtilize;
     }

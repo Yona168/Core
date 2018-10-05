@@ -30,6 +30,10 @@ public class PluginInfo {
         return secondaryColor;
     }
 
+    public String getDisplayName() {
+        return secondaryColor + "[" + mainColor + getName() + secondaryColor + "]";
+    }
+
     String getPluginNameForPermission() {
         return getName().toLowerCase();
     }

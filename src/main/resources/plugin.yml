@@ -1,3 +1,6 @@
 name: Core
 version: 1
 main: monotheistic.mongoose.core.CorePlugin
+
+commands:
+  tt:

@@ -9,7 +9,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-public abstract class CommandPart extends Component implements Executable, HasCommandInfo {
+public abstract class CommandPart extends Component implements ExecutableCommand, HasCommandInfo {
     private final CommandInfo info;
 
 
@@ -21,10 +21,16 @@ public abstract class CommandPart extends Component implements Executable, HasCo
     public final boolean execute(CommandSender sender, String cmd, String[] args, PluginInfo pluginInfo, List<Object> objs) {
 
         return initExecute(sender, cmd, args, pluginInfo, objs).orElseGet(() -> {
-            if (args.length <= this.info.getArgsToInitiallyUtilize())
+            if (args.length <= this.info.getArgsToInitiallyUtilize()) {
+                sender.sendMessage(inputValidSubCommand(pluginInfo));
                 return true;
+            }
             else
-                return executeChildIfPossibleWith(sender, Arrays.copyOfRange(args, this.info.getArgsToInitiallyUtilize(), args.length), pluginInfo, objs).orElse(false);
+                return executeChildIfPossibleWith(sender, Arrays.copyOfRange(args, this.info.getArgsToInitiallyUtilize(), args.length), pluginInfo, objs).orElseGet(() -> {
+                    if (this.isSendUsageIfNoChildFound())
+                        sender.sendMessage(inputValidSubCommand(pluginInfo));
+                    return false;
+                });
         });
     }
 
@@ -32,14 +38,11 @@ public abstract class CommandPart extends Component implements Executable, HasCo
     protected abstract Optional<Boolean> initExecute(CommandSender sender, String cmd, String[] args, PluginInfo info, List<Object> objs);
 
     private Optional<Boolean> executeChildIfPossibleWith(CommandSender sender, String[] args, PluginInfo pluginInfo, List<Object> objs) {
-
         return getChildren().stream().filter(it -> it instanceof CommandPart).map(it -> (CommandPart) it)
                 .filter(it -> it.getInfo().getName().equalsIgnoreCase(args[0])).findFirst()
-                .map(cmd -> {
-                    if (args.length - 1 < cmd.getInfo().getArgsToInitiallyUtilize())
-                        return false;
-                    return cmd.execute(sender, args[0], Arrays.copyOfRange(args, 1, args.length), pluginInfo, objs);
-                });
+                .map(cmd ->
+                        cmd.execute(sender, args[0], Arrays.copyOfRange(args, 1, args.length), pluginInfo, objs)
+                );
     }
 
     @Override
@@ -47,18 +50,16 @@ public abstract class CommandPart extends Component implements Executable, HasCo
         return this.info;
     }
 
-    protected static String pluginTag(PluginInfo info) {
-        final ChatColor second = info.getSecondaryColor();
-        final ChatColor main = info.getMainColor();
-        return second + "[" + main + info.getName() + second + "]";
-    }
-
     protected static String incorrectUsageMessage(PluginInfo info, String usage) {
-        return pluginTag(info) + ChatColor.RED + " Incorrect usage! Correct usage is: " + "/" + info.getTag() + " " + usage;
+        return info.getDisplayName() + ChatColor.RED + " Incorrect usage! Correct usage is: " + "/" + info.getTag() + " " + usage;
     }
 
     protected static String noPerms(PluginInfo info) {
-        return pluginTag(info) + ChatColor.RED + " You do not have the correct permission(s) to use this command!";
+        return info.getDisplayName() + ChatColor.RED + " You do not have the correct permission(s) to use this command!";
+    }
+
+    private static String inputValidSubCommand(PluginInfo info) {
+        return info.getDisplayName() + ChatColor.RED + " Please input a valid subcommand!";
     }
 
 }
