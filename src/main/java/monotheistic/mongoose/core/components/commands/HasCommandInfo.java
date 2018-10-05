@@ -15,8 +15,12 @@ public interface HasCommandInfo {
         return getInfo().getUsage();
     }
 
-    default boolean isSendUsageIfNoChildFound() {
+    default boolean isSendMessageIfNoChildFound() {
         return getInfo().isSendUsageMessageIfNoChildFound();
+    }
+
+    default boolean isSendMessageIfNoChildInputted() {
+        return getInfo().isSendUsageMessageIfNoChildInputted();
     }
     default String getDescription() {
         return getInfo().getDescription();

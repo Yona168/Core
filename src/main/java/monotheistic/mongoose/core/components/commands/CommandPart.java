@@ -22,12 +22,13 @@ public abstract class CommandPart extends Component implements ExecutableCommand
 
         return initExecute(sender, cmd, args, pluginInfo, objs).orElseGet(() -> {
             if (args.length <= this.info.getArgsToInitiallyUtilize()) {
-                sender.sendMessage(inputValidSubCommand(pluginInfo));
+                if (this.isSendMessageIfNoChildInputted())
+                    sender.sendMessage(inputValidSubCommand(pluginInfo));
                 return true;
             }
             else
                 return executeChildIfPossibleWith(sender, Arrays.copyOfRange(args, this.info.getArgsToInitiallyUtilize(), args.length), pluginInfo, objs).orElseGet(() -> {
-                    if (this.isSendUsageIfNoChildFound())
+                    if (this.isSendMessageIfNoChildFound())
                         sender.sendMessage(inputValidSubCommand(pluginInfo));
                     return false;
                 });
