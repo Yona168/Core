@@ -11,7 +11,7 @@ import java.util.Optional;
 
 public abstract class CommandPart extends Component implements ExecutableCommand, HasCommandInfo {
     private final CommandInfo info;
-
+    String usage, permissionNode;
 
     public CommandPart(CommandInfo info) {
         this.info = info;
@@ -25,8 +25,7 @@ public abstract class CommandPart extends Component implements ExecutableCommand
                 if (this.isSendMessageIfNoChildInputted())
                     sender.sendMessage(inputValidSubCommand(pluginInfo));
                 return true;
-            }
-            else
+            } else
                 return executeChildIfPossibleWith(sender, Arrays.copyOfRange(args, this.info.getArgsToInitiallyUtilize(), args.length), pluginInfo, objs).orElseGet(() -> {
                     if (this.isSendMessageIfNoChildFound())
                         sender.sendMessage(inputValidSubCommand(pluginInfo));
@@ -41,6 +40,13 @@ public abstract class CommandPart extends Component implements ExecutableCommand
     private Optional<Boolean> executeChildIfPossibleWith(CommandSender sender, String[] args, PluginInfo pluginInfo, List<Object> objs) {
         return getChildren().stream().filter(it -> it instanceof CommandPart).map(it -> (CommandPart) it)
                 .filter(it -> it.getInfo().getName().equalsIgnoreCase(args[0])).findFirst()
+                .filter(it -> {
+                    if (!it.canBeExecutedBy(sender)) {
+                        sender.sendMessage(noPerms(pluginInfo));
+                        return false;
+                    }
+                    return true;
+                })
                 .map(cmd ->
                         cmd.execute(sender, args[0], Arrays.copyOfRange(args, 1, args.length), pluginInfo, objs)
                 );
@@ -63,4 +69,15 @@ public abstract class CommandPart extends Component implements ExecutableCommand
         return info.getDisplayName() + ChatColor.RED + " Please input a valid subcommand!";
     }
 
+    public String getUsage() {
+        return this.usage;
+    }
+
+    public String getPermissionNode() {
+        return this.permissionNode;
+    }
+
+    boolean canBeExecutedBy(CommandSender sender) {
+        return (sender.isOp() || sender.hasPermission(this.permissionNode));
+    }
 }

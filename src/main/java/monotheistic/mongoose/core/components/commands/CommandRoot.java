@@ -1,16 +1,28 @@
 package monotheistic.mongoose.core.components.commands;
 
-import org.bukkit.command.CommandSender;
+import java.util.stream.Stream;
 
 public abstract class CommandRoot extends CommandPart {
-    private final boolean isNeedsPermission;
 
-    public CommandRoot(CommandInfo info, boolean isNeedsPermission) {
+    public CommandRoot(CommandInfo info, PluginInfo pluginInfo) {
         super(info);
-        this.isNeedsPermission = isNeedsPermission;
+        permissionNode = pluginInfo.getName() + "." + info.getName();
+        onEnable(() ->
+                getCommandPartChildrenOf(this).forEach(this::setUsagesAndPermissionsForChildren)
+        );
     }
 
-    boolean canBeExecutedBy(String pluginName, CommandSender sender) {
-        return (!isNeedsPermission || sender.isOp() || sender.hasPermission(pluginName + ".commands." + this.getName() + ".use"));
+    private void setUsagesAndPermissionsForChildren(CommandPart part) {
+        final Stream<CommandPart> children = getCommandPartChildrenOf(part);
+        children.forEach(child -> {
+            child.usage = part.getUsage() + "." + child.usage;
+            child.permissionNode = part.getName() + "." + child.getName();
+            setUsagesAndPermissionsForChildren(child);
+        });
     }
+
+    private static Stream<CommandPart> getCommandPartChildrenOf(CommandPart part) {
+        return part.getChildren().stream().filter(it -> it instanceof CommandPart).map(it -> (CommandPart) it);
+    }
+
 }

@@ -11,7 +11,7 @@ public interface HasCommandInfo {
         return getInfo().getArgsToInitiallyUtilize();
     }
 
-    default String getUsage() {
+    default String getPlainUsage() {
         return getInfo().getUsage();
     }
 

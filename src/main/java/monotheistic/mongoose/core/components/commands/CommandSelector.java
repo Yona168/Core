@@ -43,6 +43,7 @@ public final class CommandSelector extends Component implements CommandExecutor,
 
     }
 
+
     @Override
     public @NotNull PluginInfo getPluginInfo() {
         return pluginInfo;
