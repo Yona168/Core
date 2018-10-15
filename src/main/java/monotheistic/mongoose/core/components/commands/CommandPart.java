@@ -60,7 +60,7 @@ public abstract class CommandPart extends Component implements ExecutableCommand
     }
 
     protected String incorrectUsageMessage(PluginInfo info) {
-        return info.getDisplayName() + ChatColor.RED + " Incorrect usage! Correct fullUsage is: " + fullUsage;
+        return info.getDisplayName() + ChatColor.RED + " Incorrect usage! Correct usage is: " + fullUsage;
     }
 
     protected static String noPerms(PluginInfo info) {
