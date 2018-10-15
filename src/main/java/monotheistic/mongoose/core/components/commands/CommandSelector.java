@@ -10,14 +10,30 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 public final class CommandSelector extends Component implements CommandExecutor, HasPluginInfo {
     private final ExecutableCommand defaultExec;
     private final PluginInfo pluginInfo;
 
-    public CommandSelector(ExecutableCommand defaultExec, PluginInfo pluginInfo) {
+    public CommandSelector(PluginInfo pluginInfo, ExecutableCommand defaultExec) {
         this.defaultExec = defaultExec;
         this.pluginInfo = pluginInfo;
+        onEnable(() ->
+                getCommandPartChildren().forEach(it -> {
+                    it.setPermissionNodes(getPluginNameForPermission() + "." + it.getPermissionNodes());
+                    it.setFullUsage("/" + pluginInfo.getTag().toLowerCase() + " " + it.getFullUsage());
+                    walkAndSetPermissionsAndUsage(it);
+                })
+        );
+    }
+
+    private void walkAndSetPermissionsAndUsage(CommandPart root) {
+        getCommandPartChildrenOf(root).forEach(child -> {
+            child.setPermissionNodes(root.getPermissionNodes() + "." + child.getPermissionNodes());
+            child.setFullUsage(root.getFullUsage() + " " + child.getFullUsage());
+            walkAndSetPermissionsAndUsage(child);
+        });
     }
 
     @Override
@@ -26,14 +42,12 @@ public final class CommandSelector extends Component implements CommandExecutor,
             commandSender.sendMessage(getDisplayName() + ChatColor.RED + " " + s + " is not a valid command");
             return false;
         }
-        Optional<CommandRoot> toExecute = getChildren().stream().filter(it ->
-                it instanceof CommandRoot
-        ).map(it -> (CommandRoot) it).filter(part ->
-                part.getName().equalsIgnoreCase(strings[0])
+        Optional<CommandPart> toExecute = getCommandPartChildren().filter(part ->
+                part.getPartName().equalsIgnoreCase(strings[0])
         ).findFirst();
         if (toExecute.isPresent()) {
-            final CommandRoot root = toExecute.get();
-            if (!root.canBeExecutedBy(this.getPluginNameForPermission(), commandSender)) {
+            final CommandPart root = toExecute.get();
+            if (!root.canBeExecutedBy(commandSender)) {
                 commandSender.sendMessage(CommandPart.noPerms(pluginInfo));
                 return false;
             }
@@ -43,6 +57,14 @@ public final class CommandSelector extends Component implements CommandExecutor,
 
     }
 
+
+    private Stream<CommandPart> getCommandPartChildren() {
+        return this.getChildren().stream().filter(it -> it instanceof CommandPart).map(it -> (CommandPart) it);
+    }
+
+    private static Stream<CommandPart> getCommandPartChildrenOf(CommandPart part) {
+        return part.getChildren().stream().filter(it -> it instanceof CommandPart).map(it -> (CommandPart) it);
+    }
 
     @Override
     public @NotNull PluginInfo getPluginInfo() {

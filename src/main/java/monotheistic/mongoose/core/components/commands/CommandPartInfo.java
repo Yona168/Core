@@ -2,12 +2,12 @@ package monotheistic.mongoose.core.components.commands;
 
 import java.util.Objects;
 
-public class CommandInfo {
+public class CommandPartInfo {
     private final String description, usage, name;
     private final int argsToInitiallyUtilize;
     private final boolean sendUsageMessageIfNoChildFound, sendUsageMessageIfNoChildInputted;
 
-    public CommandInfo(String description, String usage, String name, int argsToInitiallyUtilize, boolean sendUsageMessageIfNoChildFound, boolean sendUsageMessageIfNoChildInputted) {
+    public CommandPartInfo(String description, String usage, String name, int argsToInitiallyUtilize, boolean sendUsageMessageIfNoChildFound, boolean sendUsageMessageIfNoChildInputted) {
         this.description = description;
         this.usage = usage;
         this.name = name;
@@ -45,7 +45,7 @@ public class CommandInfo {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        CommandInfo that = (CommandInfo) o;
+        CommandPartInfo that = (CommandPartInfo) o;
         return getArgsToInitiallyUtilize() == that.getArgsToInitiallyUtilize() &&
                 Objects.equals(getDescription(), that.getDescription()) &&
                 Objects.equals(getUsage(), that.getUsage()) &&

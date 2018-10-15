@@ -9,12 +9,14 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-public abstract class CommandPart extends Component implements ExecutableCommand, HasCommandInfo {
-    private final CommandInfo info;
-    String usage, permissionNode;
+public abstract class CommandPart extends Component implements ExecutableCommand, HasCommandPartInfo {
+    private final CommandPartInfo info;
+    private String fullUsage, permissionNodes;
 
-    public CommandPart(CommandInfo info) {
+    public CommandPart(CommandPartInfo info) {
         this.info = info;
+        this.fullUsage = info.getUsage();
+        this.permissionNodes = info.getName();
     }
 
     @Override
@@ -53,12 +55,12 @@ public abstract class CommandPart extends Component implements ExecutableCommand
     }
 
     @Override
-    public CommandInfo getInfo() {
+    public CommandPartInfo getInfo() {
         return this.info;
     }
 
-    protected static String incorrectUsageMessage(PluginInfo info, String usage) {
-        return info.getDisplayName() + ChatColor.RED + " Incorrect usage! Correct usage is: " + "/" + info.getTag() + " " + usage;
+    protected String incorrectUsageMessage(PluginInfo info) {
+        return info.getDisplayName() + ChatColor.RED + " Incorrect usage! Correct fullUsage is: " + fullUsage;
     }
 
     protected static String noPerms(PluginInfo info) {
@@ -69,15 +71,23 @@ public abstract class CommandPart extends Component implements ExecutableCommand
         return info.getDisplayName() + ChatColor.RED + " Please input a valid subcommand!";
     }
 
-    public String getUsage() {
-        return this.usage;
+    public String getFullUsage() {
+        return this.fullUsage;
     }
 
-    public String getPermissionNode() {
-        return this.permissionNode;
+    public void setFullUsage(String val) {
+        this.fullUsage = val;
+    }
+
+    public String getPermissionNodes() {
+        return this.permissionNodes;
+    }
+
+    public void setPermissionNodes(String val) {
+        this.permissionNodes = val;
     }
 
     boolean canBeExecutedBy(CommandSender sender) {
-        return (sender.isOp() || sender.hasPermission(this.permissionNode));
+        return (sender.isOp() || sender.hasPermission(this.permissionNodes));
     }
 }

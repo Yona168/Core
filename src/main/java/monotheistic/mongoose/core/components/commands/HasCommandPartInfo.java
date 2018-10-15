@@ -1,9 +1,9 @@
 package monotheistic.mongoose.core.components.commands;
 
-public interface HasCommandInfo {
-    CommandInfo getInfo();
+public interface HasCommandPartInfo {
+    CommandPartInfo getInfo();
 
-    default String getName() {
+    default String getPartName() {
         return getInfo().getName();
     }
 
@@ -11,7 +11,7 @@ public interface HasCommandInfo {
         return getInfo().getArgsToInitiallyUtilize();
     }
 
-    default String getPlainUsage() {
+    default String getPartUsage() {
         return getInfo().getUsage();
     }
 
@@ -22,7 +22,8 @@ public interface HasCommandInfo {
     default boolean isSendMessageIfNoChildInputted() {
         return getInfo().isSendUsageMessageIfNoChildInputted();
     }
-    default String getDescription() {
+
+    default String getPartDescription() {
         return getInfo().getDescription();
     }
 }

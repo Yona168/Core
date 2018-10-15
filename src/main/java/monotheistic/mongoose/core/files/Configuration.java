@@ -12,11 +12,11 @@ import java.nio.channels.ReadableByteChannel;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-import static java.util.Optional.empty;
-import static java.util.Optional.of;
+import static java.util.Optional.*;
 
 public class Configuration {
     private final FileConfiguration config;
@@ -80,10 +80,25 @@ public class Configuration {
         return file;
     }
 
-    public Object get(String key) {
-        return config.get(key);
+    public Optional<Object> get(String key) {
+        return ofNullable(config.get(key));
     }
 
+    public int getInt(String key) {
+        return config.getInt(key);
+    }
+
+    public boolean getBoolean(String key) {
+        return config.getBoolean(key);
+    }
+
+    public long getLong(String key) {
+        return config.getLong(key);
+    }
+
+    public Optional<List<String>> getStringList(String key) {
+        return ofNullable(config.getStringList(key));
+    }
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
