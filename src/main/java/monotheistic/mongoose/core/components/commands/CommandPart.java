@@ -9,7 +9,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-public abstract class CommandPart extends Component implements ExecutableCommand, HasCommandPartInfo {
+public abstract class CommandPart extends Component implements ExecutableCommand, HasCommandPartInfo, HasCommandPartChildren {
     private final CommandPartInfo info;
     private String fullUsage, permissionNodes;
 
