@@ -1,6 +1,3 @@
-name: Core
-version: 1
+name: ${project.name}
+version: ${project.version}
 main: monotheistic.mongoose.core.CorePlugin
-
-commands:
-  tt:
