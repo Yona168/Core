@@ -37,7 +37,7 @@ public final class CommandSelector extends Component implements CommandExecutor,
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
         if (strings.length < 1) {
-            return defaultExec.execute(commandSender, strings[0], Arrays.copyOfRange(strings, 1, strings.length), pluginInfo, new ArrayList<Object>());
+            return defaultExec.execute(commandSender, s, strings, pluginInfo, new ArrayList<Object>());
         }
         Optional<CommandPart> toExecute = getCommandPartChildrenAsStream().filter(part ->
                 part.getPartName().equalsIgnoreCase(strings[0])
