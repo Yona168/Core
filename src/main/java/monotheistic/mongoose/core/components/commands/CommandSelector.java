@@ -20,7 +20,7 @@ public final class CommandSelector extends Component implements CommandExecutor,
         this.pluginInfo = pluginInfo;
         onEnable(() ->
                 getCommandPartChildren().forEach(it -> {
-                    it.setPermissionNodes(pluginInfo.getPluginNameForPermission() + "." + it.getPermissionNodes());
+                    it.setPermissionNodes(pluginInfo.getPluginNameForPermission() + ".commands." + it.getPermissionNodes());
                     it.setFullUsage("/" + pluginInfo.getTag().toLowerCase() + " " + it.getFullUsage());
                     walkAndSetPermissionsAndUsage(it);
                 })
