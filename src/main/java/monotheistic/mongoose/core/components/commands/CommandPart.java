@@ -1,6 +1,5 @@
 package monotheistic.mongoose.core.components.commands;
 
-import com.gitlab.avelyn.architecture.base.Component;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
@@ -9,7 +8,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-public abstract class CommandPart extends Component implements ExecutableCommand, HasCommandPartInfo, HasCommandPartChildren {
+import static java.util.Optional.empty;
+import static java.util.Optional.of;
+
+public abstract class CommandPart extends NameCommandPartMapper implements ExecutableCommand, HasCommandPartInfo {
     private final CommandPartInfo info;
     private String fullUsage, permissionNodes;
 
@@ -40,18 +42,14 @@ public abstract class CommandPart extends Component implements ExecutableCommand
     protected abstract Optional<Boolean> initExecute(CommandSender sender, String cmd, String[] args, PluginInfo info, List<Object> objs);
 
     private Optional<Boolean> executeChildIfPossibleWith(CommandSender sender, String[] args, PluginInfo pluginInfo, List<Object> objs) {
-        return getChildren().stream().filter(it -> it instanceof CommandPart).map(it -> (CommandPart) it)
-                .filter(it -> it.getInfo().getName().equalsIgnoreCase(args[0])).findFirst()
-                .filter(it -> {
-                    if (!it.canBeExecutedBy(sender)) {
-                        sender.sendMessage(noPerms(pluginInfo));
-                        return false;
-                    }
-                    return true;
-                })
-                .map(cmd ->
-                        cmd.execute(sender, args[0], Arrays.copyOfRange(args, 1, args.length), pluginInfo, objs)
-                );
+        Optional<CommandPart> part = getByName(args[0]);
+        if (part.isPresent()) {
+            final CommandPart it = part.get();
+            if (!it.canBeExecutedBy(sender)) {
+                sender.sendMessage(noPerms(pluginInfo));
+                return of(false);
+            } else return of(it.execute(sender, args[0], Arrays.copyOfRange(args, 1, args.length), pluginInfo, objs));
+        } else return empty();
     }
 
     @Override

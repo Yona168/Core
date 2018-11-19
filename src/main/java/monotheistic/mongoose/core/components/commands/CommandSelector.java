@@ -1,6 +1,5 @@
 package monotheistic.mongoose.core.components.commands;
 
-import com.gitlab.avelyn.architecture.base.Component;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -10,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Optional;
 
-public final class CommandSelector extends Component implements CommandExecutor, HasCommandPartChildren {
+public final class CommandSelector extends NameCommandPartMapper implements CommandExecutor {
     private final ExecutableCommand defaultExec;
     private final PluginInfo pluginInfo;
 
@@ -39,9 +38,7 @@ public final class CommandSelector extends Component implements CommandExecutor,
         if (strings.length < 1) {
             return defaultExec.execute(commandSender, s, strings, pluginInfo, new ArrayList<Object>());
         }
-        Optional<CommandPart> toExecute = getCommandPartChildrenAsStream().filter(part ->
-                part.getPartName().equalsIgnoreCase(strings[0])
-        ).findFirst();
+        Optional<CommandPart> toExecute = getByName(strings[0]);
         if (toExecute.isPresent()) {
             final CommandPart root = toExecute.get();
             if (!root.canBeExecutedBy(commandSender)) {
