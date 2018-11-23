@@ -28,26 +28,9 @@ public class PaginatorGUI {
         final int margin = contents.length % (size - 9);
 
         for (int i = 1; i <= amtOfPages; i++) {
-            final MyGUI gui;
             pages.add(createPage(title, i, size, listener, contents, (i - 1) * (size - 9), (i * (size - 9))));
-            //pages.add(gui = new MyGUI(titleForPage(title, i), size));
-           /* if (listener != null)
-                gui.addAllTimeListener(listener);
-            gui.set(size - 9, REDSTONE_BACK, (InventoryClickEvent event) ->
-                    back((Player) event.getWhoClicked()))
-                    .set(size - 1, EMERALD_FORWARDS, (InventoryClickEvent event) -> next((Player) event.getWhoClicked())).set(pageIdentifier(i), size - 5)
-                    .addItems(Arrays.copyOfRange(contents, (i - 1) * (size - 9), (i * (size - 9))));*/
         }
         if (margin > 0) {
-            /*final MyGUI gui;
-            pages.add(gui = new MyGUI(titleForPage(title, pages.size() + 1), size));
-            if (listener != null)
-                gui.addAllTimeListener(listener);
-            gui.set(size - 9, REDSTONE_BACK, (InventoryClickEvent event) ->
-                    back((Player) event.getWhoClicked()))
-                    .set(size - 1, EMERALD_FORWARDS, (InventoryClickEvent event) -> next((Player) event.getWhoClicked())).set(pageIdentifier(pages.size() + 1), size - 5)
-                    .addItems(Arrays.copyOfRange(contents, contents.length - margin, contents.length));*/
-
             pages.add(createPage(title, pages.size(), size, listener, contents, contents.length - margin, contents.length));
         }
 
@@ -92,6 +75,8 @@ public class PaginatorGUI {
     }
 
     public void open(Player player) {
-        pages.get(0).open(player);
+        if (pages.size() != 0)
+            pages.get(0).open(player);
+        else player.sendMessage(ChatColor.RED + "This GUI is empty.");
     }
 }
