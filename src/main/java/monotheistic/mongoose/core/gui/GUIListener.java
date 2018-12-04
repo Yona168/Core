@@ -1,13 +1,9 @@
 package monotheistic.mongoose.core.gui;
 
 import com.gitlab.avelyn.architecture.base.Component;
-import monotheistic.mongoose.core.utils.ItemBuilder;
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
-import org.bukkit.inventory.ItemFlag;
 
 import java.util.function.Consumer;
 
@@ -36,13 +32,5 @@ public class GUIListener extends Component {
             }
         }));
 
-        onDisable(() -> {
-            PaginatorGUI.EMERALD_FORWARDS = null;
-            PaginatorGUI.REDSTONE_BACK = null;
-        });
-        onEnable(() -> {
-            PaginatorGUI.REDSTONE_BACK = new ItemBuilder(Material.REDSTONE_BLOCK).name(ChatColor.GOLD + "<- Back").addItemFlags(ItemFlag.HIDE_ATTRIBUTES).build();
-            PaginatorGUI.EMERALD_FORWARDS = new ItemBuilder(Material.EMERALD_BLOCK).name(ChatColor.GOLD + "Next ->").addItemFlags(ItemFlag.HIDE_ATTRIBUTES).build();
-        });
     }
 }
