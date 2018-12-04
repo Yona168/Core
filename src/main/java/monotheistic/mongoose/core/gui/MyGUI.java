@@ -4,6 +4,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
@@ -11,14 +13,18 @@ import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
-import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
-public class MyGUI implements InventoryHolder {
+public class MyGUI implements InventoryHolder, GUI {
     private Inventory inventory;
     final Map<Integer, Consumer<InventoryClickEvent>> listeners = new HashMap<>();
     final Set<Consumer<InventoryClickEvent>> allTimeListeners = new HashSet<>();
     private MyGUI parent;
+
+  private MyGUI(MyGUI parent, String name, int size) {
+    this(name, size);
+    this.parent = parent;
+  }
 
     public MyGUI(String name, int size) {
         inventory = Bukkit.createInventory(this, size, name);
@@ -50,8 +56,9 @@ public class MyGUI implements InventoryHolder {
         return this;
     }
 
-    public boolean hasListenerSetFor(int slot) {
-        return getListeners().containsKey(slot);
+  @Override
+  public GUI createChild(String name, int size) {
+    return new MyGUI(this, name, size);
     }
 
     private Map<Integer, Consumer<InventoryClickEvent>> getListeners() {
@@ -66,12 +73,11 @@ public class MyGUI implements InventoryHolder {
         player.openInventory(getView(player));
     }
 
-    public void openParent(final Player player) {
+  public boolean openParent(final Player player) {
+    if (parent == null)
+      return false;
         parent.open(player);
-    }
-
-    public void child(MyGUI child) {
-        child.parent = this;
+    return true;
     }
 
     private InventoryView getView(final Player player) {
@@ -104,39 +110,13 @@ public class MyGUI implements InventoryHolder {
         return inventory;
     }
 
+  @Override
+  public void onOpen(InventoryOpenEvent event) {
 
-    //Decoration Things
-    public enum Preset {
-        BORDER((item, inv) -> {
-            //TOP
-            for (int i = 0; i < 9; i++) {
-                inv.setItem(i, item);
-            }
-            //BOTTOM
-            for (int i = inv.getSize() - 9; i < inv.getSize(); i++) {
-                inv.setItem(i, item);
-            }
-            //LEFT
-            for (int i = 0; i < inv.getSize(); i += 9) {
-                inv.setItem(i, item);
-            }
-            //RIGHT
-            for (int i = 8; i < inv.getSize(); i += 9) {
-                inv.setItem(i, item);
-            }
-        });
+  }
 
+  @Override
+  public void onClose(InventoryCloseEvent event) {
 
-        private final BiConsumer<ItemStack, Inventory> putAction;
-
-        Preset(BiConsumer<ItemStack, Inventory> action) {
-            this.putAction = action;
-        }
-
-    }
-
-    public MyGUI withPattern(ItemStack item, Preset preset) {
-        preset.putAction.accept(item, this.inventory);
-        return this;
     }
 }

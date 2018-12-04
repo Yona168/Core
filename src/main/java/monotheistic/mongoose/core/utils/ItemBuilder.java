@@ -12,8 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 public class ItemBuilder {
-
-    private ItemMeta meta;
+  private ItemMeta meta;
     private ItemStack itemStack;
 
     public ItemBuilder(ItemStack itemStack) {
@@ -90,6 +89,5 @@ public class ItemBuilder {
         itemStack.setItemMeta(meta);
         return itemStack;
     }
-
 
 }
