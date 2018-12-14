@@ -8,22 +8,24 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public abstract class NameCommandPartMapper extends Component {
-    private Map<String, CommandPart> childrenMap;
+public abstract class NameCommandPartMapper extends Component implements CommandPartParent {
+  private Map<String, CommandPart> childrenMap;
 
-    public NameCommandPartMapper() {
-        onEnable(() -> {
-            childrenMap = getCommandPartChildren().collect(Collectors.toMap(
-                    CommandPart::getPartName, Function.identity()
-            ));
-        });
-    }
+  public NameCommandPartMapper() {
+    onEnable(() -> {
+      childrenMap = getChildren().stream().filter(it -> it instanceof CommandPart).map(it -> (CommandPart) it).collect(Collectors.toMap(
+              CommandPart::getPartName, Function.identity()
+      ));
+    });
+  }
 
-    Optional<CommandPart> getByName(final String str) {
-        return Optional.ofNullable(childrenMap.get(str));
-    }
+  Optional<CommandPart> getByName(final String str) {
+    return Optional.ofNullable(childrenMap.get(str));
+  }
 
-    Stream<CommandPart> getCommandPartChildren() {
-        return getChildren().stream().filter(it -> it instanceof CommandPart).map(it -> (CommandPart) it);
-    }
+  @Override
+  public Stream<CommandPart> getCommandPartChildren() {
+    return childrenMap.values().stream();
+  }
+
 }
