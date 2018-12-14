@@ -18,34 +18,35 @@ public class Configuration extends YamlConfiguration implements IConfiguration {
   }
 
   public static Configuration loadConfiguration(Path folder, String fileName) throws IOException {
-        Path path = Paths.get(folder.toAbsolutePath().toString(), fileName);
+    Path path = Paths.get(folder.toAbsolutePath().toString(), fileName);
     final Configuration config = new Configuration();
-        if (!Files.exists(path)) {
-          config.file = createFileWithParents(path).orElseThrow(IOException::new);
-          try {
-            config.load(config.file.toFile());
-          } catch (InvalidConfigurationException e) {
-            e.printStackTrace();
-          }
-        } else config.file = path;
-    return config;
+    if (!Files.exists(path)) {
+      config.file = createFileWithParents(path).orElseThrow(IOException::new);
+    } else config.file = path;
+    try {
+      config.load(config.file.toFile());
+    } catch (InvalidConfigurationException e) {
+      e.printStackTrace();
     }
 
-    private static Optional<Path> createFileWithParents(Path file) {
-        if (Files.exists(file))
-            return of(file);
-        Path parent = file.getParent();
-        try {
-            if (parent != null && !Files.exists(parent)) {
-                Files.createDirectories(parent);
-            }
-            Files.createFile(file);
-            return of(file);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return empty();
-        }
+    return config;
+  }
+
+  private static Optional<Path> createFileWithParents(Path file) {
+    if (Files.exists(file))
+      return of(file);
+    Path parent = file.getParent();
+    try {
+      if (parent != null && !Files.exists(parent)) {
+        Files.createDirectories(parent);
+      }
+      Files.createFile(file);
+      return of(file);
+    } catch (IOException e) {
+      e.printStackTrace();
+      return empty();
     }
+  }
 
   @Override
   public <T> Optional<T> get(String key, Class<T> clazz) {
@@ -54,7 +55,7 @@ public class Configuration extends YamlConfiguration implements IConfiguration {
     } catch (ClassCastException e) {
       return empty();
     }
-    }
+  }
 
 
   @Override
@@ -67,13 +68,13 @@ public class Configuration extends YamlConfiguration implements IConfiguration {
     return this;
   }
 
-    @Override
-    public Configuration save() {
-      try {
-        super.save(file.toFile());
-      } catch (IOException e) {
-        e.printStackTrace();
-      }
-      return this;
+  @Override
+  public Configuration save() {
+    try {
+      super.save(file.toFile());
+    } catch (IOException e) {
+      e.printStackTrace();
     }
+    return this;
+  }
 }
