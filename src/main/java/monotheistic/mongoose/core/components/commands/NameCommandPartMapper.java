@@ -13,7 +13,7 @@ public abstract class NameCommandPartMapper extends Component implements Command
 
   public NameCommandPartMapper() {
     onEnable(() -> {
-      childrenMap = getChildren().stream().filter(it -> it instanceof CommandPart).map(it -> (CommandPart) it).collect(Collectors.toMap(
+      childrenMap = filterThroughChildrenForCommandParts().collect(Collectors.toMap(
               CommandPart::getPartName, Function.identity()
       ));
     });
@@ -25,7 +25,13 @@ public abstract class NameCommandPartMapper extends Component implements Command
 
   @Override
   public Stream<CommandPart> getCommandPartChildren() {
-    return childrenMap.values().stream();
+    if (this.isEnabled()) {
+      return childrenMap.values().stream();
+    } else return filterThroughChildrenForCommandParts();
+
   }
 
+  private Stream<CommandPart> filterThroughChildrenForCommandParts() {
+    return getChildren().stream().filter(it -> it instanceof CommandPart).map(it -> (CommandPart) it);
+  }
 }
