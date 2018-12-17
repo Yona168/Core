@@ -4,6 +4,7 @@ import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -12,24 +13,34 @@ import java.util.Optional;
 import static java.util.Optional.*;
 
 public class Configuration extends YamlConfiguration implements IConfiguration {
-  private Path file;
+  private final Path file;
 
-  private Configuration() {
+  private Configuration(Path file) {
+    this.file = file;
   }
 
-  public static Configuration loadConfiguration(Path folder, String fileName) throws IOException {
+  public static Configuration loadConfiguration(Path folder, String fileName) {
     Path path = Paths.get(folder.toAbsolutePath().toString(), fileName);
-    final Configuration config = new Configuration();
-    if (!Files.exists(path)) {
-      config.file = createFileWithParents(path).orElseThrow(IOException::new);
-    } else config.file = path;
     try {
-      config.load(config.file.toFile());
-    } catch (InvalidConfigurationException e) {
+      final Configuration config;
+      if (!Files.exists(path)) {
+        Path parent = path.getParent();
+        if (!Files.exists(parent))
+          Files.createDirectories(parent);
+        final InputStream inputStream = Configuration.class.getClassLoader().getResourceAsStream("config.yml");
+        Files.copy(inputStream, path);
+      }
+      config = new Configuration(path);
+      try {
+        config.load(config.file.toFile());
+      } catch (InvalidConfigurationException e) {
+        e.printStackTrace();
+      }
+      return config;
+    } catch (IOException e) {
       e.printStackTrace();
+      return null;
     }
-
-    return config;
   }
 
   private static Optional<Path> createFileWithParents(Path file) {
