@@ -19,7 +19,7 @@ public class Configuration extends YamlConfiguration implements IConfiguration {
     this.file = file;
   }
 
-  public static Configuration loadConfiguration(Path folder, String fileName) {
+  public static Configuration loadConfiguration(ClassLoader loader, Path folder, String fileName) {
     Path path = Paths.get(folder.toAbsolutePath().toString(), fileName);
     try {
       final Configuration config;
@@ -27,7 +27,7 @@ public class Configuration extends YamlConfiguration implements IConfiguration {
         Path parent = path.getParent();
         if (!Files.exists(parent))
           Files.createDirectories(parent);
-        final InputStream inputStream = Configuration.class.getClassLoader().getResourceAsStream("config.yml");
+        final InputStream inputStream = loader.getResourceAsStream(fileName);
         Files.copy(inputStream, path);
       }
       config = new Configuration(path);
