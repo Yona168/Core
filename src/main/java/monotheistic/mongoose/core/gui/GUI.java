@@ -42,10 +42,10 @@ public interface GUI extends OpenCloseListener {
       for (int i = 2; i <= contentsPartitioned.length; i++) {
         final GUI child = parent.createChild(paginateInfo.titleForPage(i), size);
         child.addAllTimeListener(listener);
-        child.addItems(contents[i - 1]);
+        child.addItems(contentsPartitioned[i - 1]);
         child.set(size - 9, paginateInfo.backwards(), (InventoryClickEvent event) -> child.openParent((Player) event.getWhoClicked()));
         child.set(paginateInfo.pageIdentifier(i), size - 5);
-        parent.set(size - 5, paginateInfo.forwards(), (InventoryClickEvent event) -> child.open((Player) event.getWhoClicked()));
+        parent.set(size - 1, paginateInfo.forwards(), (InventoryClickEvent event) -> child.open((Player) event.getWhoClicked()));
         parent = child;
       }
       return of(firstPage);

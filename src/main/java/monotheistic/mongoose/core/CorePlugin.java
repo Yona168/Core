@@ -7,5 +7,4 @@ public class CorePlugin extends ComponentPlugin {
   public CorePlugin() {
     addChild(new GUIListener());
   }
-
 }

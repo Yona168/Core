@@ -8,8 +8,8 @@ import org.bukkit.inventory.ItemStack;
 
 public interface PaginateIcons {
   PaginateIcons DEFAULT = new PaginateIcons() {
-    private final ItemStack BACK = new ItemBuilder(Material.EMERALD_BLOCK).name(ChatColor.GOLD + "Next ->").addItemFlags(ItemFlag.HIDE_ATTRIBUTES).build();
-    private final ItemStack FORWARDS = new ItemBuilder(Material.REDSTONE_BLOCK).name(ChatColor.GOLD + "<- Back").addItemFlags(ItemFlag.HIDE_ATTRIBUTES).build();
+    private final ItemStack FORWARDS = new ItemBuilder(Material.EMERALD_BLOCK).name(ChatColor.GOLD + "Next ->").addItemFlags(ItemFlag.HIDE_ATTRIBUTES).build();
+    private final ItemStack BACK = new ItemBuilder(Material.REDSTONE_BLOCK).name(ChatColor.GOLD + "<- Back").addItemFlags(ItemFlag.HIDE_ATTRIBUTES).build();
 
     @Override
     public ItemStack forwards() {
@@ -23,7 +23,7 @@ public interface PaginateIcons {
 
     @Override
     public ItemStack pageIdentifier(int page) {
-      return new ItemBuilder(Material.PAPER).name(ChatColor.GOLD + "Page: " + (page + 1)).addItemFlags(ItemFlag.HIDE_ATTRIBUTES).build();
+      return new ItemBuilder(Material.PAPER).name(ChatColor.GOLD + "Page: " + (page)).addItemFlags(ItemFlag.HIDE_ATTRIBUTES).build();
     }
 
     @Override
