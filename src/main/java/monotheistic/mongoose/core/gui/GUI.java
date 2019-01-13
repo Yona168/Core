@@ -36,6 +36,8 @@ public interface GUI extends OpenCloseListener {
     if (contentsPartitioned.length != 0) {
       final GUI firstPage = guiCreator.apply(paginateInfo.titleForPage(1), size);
       firstPage.addItems(contentsPartitioned[0]);
+      firstPage.set(paginateInfo.pageIdentifier(1), size - 5);
+      firstPage.addAllTimeListener(listener);
       GUI parent = firstPage;
       for (int i = 2; i <= contentsPartitioned.length; i++) {
         final GUI child = parent.createChild(paginateInfo.titleForPage(i), size);
