@@ -24,6 +24,6 @@ public interface StorerCache<K, V> extends Storer<K, V> {
     }
 
     default V fromCacheOrLoadFromDatabase(K key) {
-        return fromCache(key).orElse(fromDatabaseOrLoadNewToCache(key));
+        return fromCache(key).orElseGet(() -> fromDatabaseOrLoadNewToCache(key));
     }
 }

@@ -6,23 +6,24 @@ import java.util.Map;
 import java.util.function.Function;
 
 public abstract class DatabaseComponent<K, V> extends Component implements StorerCache<K, V> {
-    private Function<K, V> dataCreator;
-    private Map<K, V> cache;
+  private Function<K, V> dataCreator;
+  private Map<K, V> cache;
 
-    public DatabaseComponent(Function<K, V> dataCreator, Map<K, V> cache) {
-        this.dataCreator = dataCreator;
-        this.cache = cache;
-    }
+  public DatabaseComponent(Function<K, V> dataCreator, Map<K, V> cache) {
+    this.dataCreator = dataCreator;
+    this.cache = cache;
+    onDisable(this::backup);
+  }
 
-    @Override
-    public Map<K, V> cache() {
-        return cache;
-    }
+  @Override
+  public Map<K, V> cache() {
+    return cache;
+  }
 
-    @Override
-    public Function<K, V> dataSupplier() {
-        return dataCreator;
-    }
+  @Override
+  public Function<K, V> dataSupplier() {
+    return dataCreator;
+  }
 
 
 }
