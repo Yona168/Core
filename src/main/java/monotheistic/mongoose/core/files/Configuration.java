@@ -9,8 +9,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Optional;
+import java.util.function.Function;
 
-import static java.util.Optional.*;
+import static java.util.Optional.empty;
+import static java.util.Optional.ofNullable;
 
 public class Configuration extends YamlConfiguration implements IConfiguration {
   private final Path file;
@@ -43,20 +45,14 @@ public class Configuration extends YamlConfiguration implements IConfiguration {
     }
   }
 
-  private static Optional<Path> createFileWithParents(Path file) {
-    if (Files.exists(file))
-      return of(file);
-    Path parent = file.getParent();
-    try {
-      if (parent != null && !Files.exists(parent)) {
-        Files.createDirectories(parent);
-      }
-      Files.createFile(file);
-      return of(file);
-    } catch (IOException e) {
-      e.printStackTrace();
-      return empty();
-    }
+  public static <T> Optional<T> deserialize(Object gotten, Function<Object, T> deserializer) {
+    return Optional.ofNullable(deserializer.apply(gotten));
+  }
+
+  @Override
+  public <T> Optional<T> getAndDeserialize(String key, Function<Object, T> translator) {
+    final Object gotten = get(key);
+    return deserialize(gotten, translator);
   }
 
   @Override
@@ -88,4 +84,5 @@ public class Configuration extends YamlConfiguration implements IConfiguration {
     }
     return this;
   }
+
 }
