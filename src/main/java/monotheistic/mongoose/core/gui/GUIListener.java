@@ -2,6 +2,8 @@ package monotheistic.mongoose.core.gui;
 
 import com.gitlab.avelyn.architecture.base.Component;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 
@@ -27,6 +29,20 @@ public class GUIListener extends Component {
                 }
               }
             }));
+
+    addChild(listen(InventoryOpenEvent.class, (InventoryOpenEvent event) -> {
+      final Inventory opened = event.getInventory();
+      if (opened.getHolder() instanceof OpenCloseListener) {
+        ((OpenCloseListener) opened.getHolder()).onOpen(event);
+      }
+    }));
+
+    addChild(listen(InventoryCloseEvent.class, (InventoryCloseEvent event) -> {
+      final Inventory closed = event.getInventory();
+      if (closed.getHolder() instanceof OpenCloseListener) {
+        ((OpenCloseListener) closed.getHolder()).onClose(event);
+      }
+    }));
 
   }
 }
