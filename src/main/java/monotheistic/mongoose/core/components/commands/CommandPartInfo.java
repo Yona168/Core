@@ -16,6 +16,10 @@ public class CommandPartInfo {
         this.sendUsageMessageIfNoChildInputted = sendUsageMessageIfNoChildInputted;
     }
 
+    public CommandPartInfo(String description, String usage, String name, int argsToInitiallyUtilize) {
+        this(description, usage, name, argsToInitiallyUtilize, false, false);
+    }
+
 
     String getDescription() {
         return description;
