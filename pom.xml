@@ -76,7 +76,7 @@
         <dependency>
             <groupId>com.gitlab.Avelyn</groupId>
             <artifactId>core</artifactId>
-            <version>0.0.11</version>
+            <version>0.0.5</version>
             <scope>compile</scope>
         </dependency>
         <!--Spigot API and NMS-->
